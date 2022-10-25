@@ -35,7 +35,14 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-  
+
+  @override
+  void initState() {
+    super.initState();
+    initializeAllPosts();
+    //print(allPosts);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

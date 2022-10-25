@@ -54,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> goToHomePage() async{
-    print("test");
     var loginStatus = await Navigator.pushNamed(context, r'/homePage');
   }
 
