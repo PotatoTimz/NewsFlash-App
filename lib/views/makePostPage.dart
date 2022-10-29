@@ -92,7 +92,6 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                     title: title,
                     shortDescription: shortDecription,
                   );
-                  postsListBLoC.addPost(newPost);
                   Navigator.of(context).pop(newPost);
                 },
                 child: Text("Create Post"))

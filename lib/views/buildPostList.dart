@@ -29,7 +29,7 @@ Widget buildShortPost(context, index){
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                   IconButton(
                     onPressed: () {
-                      postsListBLoC.removePost(index);
+                      _showPostOptions(context, index);
                     },
                     icon: const Icon(Icons.more_vert),
                   ),
@@ -110,7 +110,7 @@ Widget buildLongPost(context, index){
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   IconButton(
                     onPressed: () {
-                      postsListBLoC.removePost(index);
+                      _showPostOptions(context, index);
                     },
                     icon: const Icon(Icons.more_vert),
                   ),
@@ -201,4 +201,74 @@ Widget buildLongPost(context, index){
       ),
     ],
   );
+}
+
+_showPostOptions(context, index){
+  showDialog(
+      context: context,
+      builder: (context){
+        return SimpleDialog(
+          title: const Text("What would you like to do"),
+          children: [
+            SimpleDialogOption(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                  goToUpdatePostPage(context, index);
+                },
+                child: const Text("Edit post")
+            ),
+            SimpleDialogOption(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                  _showDeleteDialog(context, index);
+                },
+                child: const Text("Delete post")
+            ),
+            SimpleDialogOption(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Save post")
+            ),
+          ],
+        );
+      }
+  );
+}
+
+_showDeleteDialog(context, index){
+  PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
+
+  showDialog(context: context,
+      barrierDismissible: false,                              //doesnt allow user to click of alert pop up
+      builder: (context){
+        return AlertDialog(
+          title: const Text("Delete Post"),
+          content: const Text("Are you sure you would like to delete this post"),
+          actions: [
+            TextButton(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                child: Text("Cancel")
+            ),
+            TextButton(
+                onPressed: (){
+                  postsListBLoC.removePost(index);
+                  Navigator.of(context).pop();
+                },
+                child: Text("Delete")
+            )
+          ],
+        );
+      }
+  );
+}
+
+
+Future<void> goToUpdatePostPage(context, index) async{
+  PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
+
+  var newPost = await Navigator.pushNamed(context, r'/createPostPage');
+  postsListBLoC.updatePost(index, newPost);
 }

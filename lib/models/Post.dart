@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Post{
   String? userName;
@@ -94,4 +95,10 @@ class PostsListBLoC with ChangeNotifier{
     _posts.add(newPost);
     notifyListeners();
   }
+
+  updatePost(index, newPost){
+    _posts[index] = newPost;
+    notifyListeners();
+  }
+
 }

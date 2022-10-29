@@ -66,15 +66,21 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           }
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: goToCreatePostPage,
+        onPressed: (){
+          goToCreatePostPage(context);
+        },
         tooltip: 'Make Post',
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> goToCreatePostPage() async{
-    var loginStatus = await Navigator.pushNamed(context, r'/createPostPage');
+  Future<void> goToCreatePostPage(context) async{
+
+    PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
+
+    var newPost = await Navigator.pushNamed(context, r'/createPostPage');
+    postsListBLoC.addPost(newPost);
   }
 }
 
