@@ -15,10 +15,11 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
   var formKey = GlobalKey<FormState>();
 
   String? userName = '';      //temp
-  String? description = '';
+  String? longDescription = '';
   String? title = '';
   String? imageURL = '';
   String? timeString = '';
+  String? shortDecription = '';
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,18 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
             ),
             TextFormField(
               decoration: const InputDecoration(
-                  labelText: "Description"
+                  labelText: "Long Description"
               ),
               onChanged: (value){
-                description = value;
+                longDescription = value;
+              },
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                  labelText: "Short Description"
+              ),
+              onChanged: (value){
+                shortDecription = value;
               },
             ),
             TextFormField(
@@ -78,9 +87,10 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                   Post newPost = Post(
                     userName: userName,
                     timeString: timeString,
-                    description: description,
+                    longDescription: longDescription,
                     imageURL: imageURL,
-                    title: title
+                    title: title,
+                    shortDescription: shortDecription,
                   );
                   postsListBLoC.addPost(newPost);
                   Navigator.of(context).pop(newPost);
