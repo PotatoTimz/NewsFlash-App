@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:groupproject/models/Post.dart';
-import 'package:groupproject/views/homePage.dart';
-import 'package:groupproject/views/makePostPage.dart';
+import 'package:groupproject/views/HomePage/CommentPage.dart';
+import 'package:groupproject/views/HomePage/HomePage.dart';
+import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/homePage' : (context) => const HomePageWidget(title: "HomePage"),
         '/createPostPage' : (context) => const CreatePostWidget(title: "Create a Post"),
+        '/commentPage' : (context) => CommentPage(title: "Comment Page"),
       },
     );
   }

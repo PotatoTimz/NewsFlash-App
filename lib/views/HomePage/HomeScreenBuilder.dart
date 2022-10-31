@@ -1,8 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/Post.dart';
+import '../../models/Post.dart';
 
+int? selectedIndex;
+
+class ListViewHomePage extends StatefulWidget {
+  const ListViewHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<ListViewHomePage> createState() => _ListViewHomePageState();
+}
+
+class _ListViewHomePageState extends State<ListViewHomePage> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
+
+    return  ListView.builder(
+        itemCount: postsListBLoC.posts.length,
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                    // print("selected index $selectedIndex");
+                  });
+                },
+                onLongPress: (){
+                  setState(() {
+                    selectedIndex = 1^1000;
+                  });
+                },
+                onDoubleTap: (){
+                  selectedIndex = index;
+                  goToCommentPage(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
+                  padding: const EdgeInsets.all(15),
+                  child: selectedIndex != index ? buildShortPost(context, index) : buildLongPost(context, index),
+                )
+            ),
+          );
+        }
+    );
+  }
+}
+
+Future<void> goToCommentPage(context) async{
+  var newPost = await Navigator.pushNamed(context, r'/commentPage');
+}
 
 Widget buildShortPost(context, index){
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
@@ -145,15 +199,17 @@ Widget buildLongPost(context, index){
       //Description
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Text(
-          "${postsListBLoC.posts[index].longDescription}",
-          style: const TextStyle(fontSize: 15),
+        child:Flexible(
+          child: Text(
+            "${postsListBLoC.posts[index].longDescription}",
+            style: const TextStyle(fontSize: 15),
+          ),
         ),
       ),
       const SizedBox(height: 20),
 
       //Image
-      Image.network("${postsListBLoC.posts[index].imageURL}"),
+      Image.network("${postsListBLoC.posts[index].imageURL}", fit: BoxFit.fill,),
       //image section
       const SizedBox(height: 20,),
 
@@ -264,7 +320,6 @@ _showDeleteDialog(context, index){
       }
   );
 }
-
 
 Future<void> goToUpdatePostPage(context, index) async{
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
