@@ -91,6 +91,10 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                     imageURL: imageURL,
                     title: title,
                     shortDescription: shortDecription,
+                    numReposts: 0,
+                    numLikes: 0,
+                    numDislikes: 0,
+                    comments: [],
                   );
                   Navigator.of(context).pop(newPost);
                 },

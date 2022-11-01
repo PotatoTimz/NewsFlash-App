@@ -221,12 +221,10 @@ Widget buildLongPost(context, index){
               size: 20,
             ),
           ),
-          Text("  ${postsListBLoC.posts[index].numComments}"),
+          Text("  ${postsListBLoC.posts[index].comments?.length}"),
           const SizedBox(width: 20),
           IconButton(
             onPressed: () {
-              postsListBLoC.increaseReposts(index);
-              // print("Number of Reposts: ${postsListBLoC.posts[index].numReposts}");
             },
             icon: const Icon(Icons.repeat, size: 20),
           ),
@@ -234,8 +232,6 @@ Widget buildLongPost(context, index){
           const SizedBox(width: 20),
           IconButton(
             onPressed: () {
-              postsListBLoC.increaseLikes(index);
-              // print("Number of Likes: ${postsListBLoC.posts[index].numLikes}");
             },
             icon:
             const Icon(Icons.thumb_up_outlined, size: 20),
@@ -244,8 +240,6 @@ Widget buildLongPost(context, index){
           const SizedBox(width: 20),
           IconButton(
             onPressed: () {
-              postsListBLoC.increaseDislikes(index);
-              // print("Number of Dislikes: ${postsListBLoC.posts[index].numDislikes}");
             },
             icon: const Icon(Icons.thumb_down_outlined,
                 size: 20),

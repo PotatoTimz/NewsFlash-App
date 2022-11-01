@@ -1,11 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/models/Post.dart';
-import 'package:groupproject/views/HomePage/CommentPage.dart';
-import 'package:groupproject/views/HomePage/HomePage.dart';
+import 'package:groupproject/views/HomePageTabs/CommentPage.dart';
+import 'package:groupproject/views/HomePage.dart';
 import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
-import 'package:flutter/material.dart';
-
 void main() {
   runApp(
       MultiProvider(
@@ -21,20 +20,35 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginPage(title: 'Flutter Demo Home Page'),
-      routes: {
-        '/homePage' : (context) => const HomePageWidget(title: "HomePage"),
-        '/createPostPage' : (context) => const CreatePostWidget(title: "Create a Post"),
-        '/commentPage' : (context) => CommentPage(title: "Comment Page"),
-      },
+    return FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print("Error initializing Firebase");
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            print("Succesfully connected to Firebase");
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: const LoginPage(title: 'Flutter Demo Home Page'),
+              routes: {
+                '/homePage': (context) =>
+                const HomePageWidget(title: "HomePage"),
+                '/createPostPage': (context) =>
+                const CreatePostWidget(title: "Create a Post"),
+                '/commentPage': (context) => CommentPage()
+              },
+            );
+          }
+          else {
+            return CircularProgressIndicator();
+          }
+        }
     );
   }
 }

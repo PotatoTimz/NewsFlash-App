@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post{
   String? userName;
@@ -8,16 +8,45 @@ class Post{
   String? shortDescription;
   String? imageURL;
   String? title;
-  //CommentPage
-  List<String> comments = ["I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that"];
+  List<dynamic>? comments;
 
-  int numComments = 0;
-  int numReposts = 0;
-  int numLikes = 0;
-  int numDislikes = 0;
+  int? numReposts;
+  int? numLikes;
+  int? numDislikes;
 
+  DocumentReference? reference;
 
-  Post({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription});
+  Post({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription, this.numLikes, this.numDislikes, this.numReposts, this.comments});
+
+  Post.fromMap(var map, {this.reference}){
+    this.userName = map['userName'];
+    this.timeString = map['timeString'];
+    this.longDescription = map['longDescription'];
+    this.shortDescription = map['shortDescription'];
+    this.imageURL = map['imageURL'];
+    this.title = map['title'];
+    this.comments = map['comments'];
+    this.numReposts = map['numReposts'];
+    this.numLikes = map['numLikes'];
+    this.numDislikes = map['numDislikes'];
+  }
+
+  Map<String, Object?> Tomap(){
+    return{
+      // 'name' : this.name,
+      'userName' :this.userName,
+      'timeString':this.timeString,
+      'longDescription' :this.longDescription,
+      'shortDescription':this.shortDescription,
+      'imageURL':this.imageURL,
+      'title' :this.title,
+      'comments':this.comments,
+      'numReposts' :this.numReposts,
+      'numLikes':this.numLikes,
+      'numDislikes':this.numDislikes,
+    };
+  }
+
 
   @override
   String toString() {
@@ -35,7 +64,9 @@ class PostsListBLoC with ChangeNotifier{
         imageURL:
         "https://d26oc3sg82pgk3.cloudfront.net/files/media/edit/image/40377/square_thumb%402x.jpg",
         title: "Test Title MUST BE VERY LONG",
-        shortDescription: "this small article is about lambda calculus!this small article is about lambda calculus!this small article is about lambda calculus!this small article is about lambda calculus!"),
+        shortDescription: "this small article is about lambda calculus!this small article is about lambda calculus!this small article is about lambda calculus!this small article is about lambda calculus!",
+        comments: ["I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that"],
+        numLikes: 0, numDislikes: 0, numReposts: 0),
     Post(
         userName: "Mr.man",
         timeString: "3hr",
@@ -44,7 +75,9 @@ class PostsListBLoC with ChangeNotifier{
         imageURL:
         "https://i.harperapps.com/covers/9780008108298/y648.jpg",
         title: "Test Title",
-        shortDescription: "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien’s extensive knowledge of philology and folklore."),
+        shortDescription: "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien’s extensive knowledge of philology and folklore.",
+        comments: ["I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that"],
+        numLikes: 0, numDislikes: 0, numReposts: 0),
     Post(
         userName: "Mr.man",
         timeString: "3hr",
@@ -53,7 +86,9 @@ class PostsListBLoC with ChangeNotifier{
         imageURL:
         "https://d26oc3sg82pgk3.cloudfront.net/files/media/edit/image/40377/square_thumb%402x.jpg",
         title: "Test Title",
-        shortDescription: "ok this is a short description"),
+        shortDescription: "ok this is a short description",
+        comments: ["I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that"],
+        numLikes: 0, numDislikes: 0, numReposts: 0),
     Post(
         userName: "Mr.man",
         timeString: "3hr",
@@ -62,25 +97,12 @@ class PostsListBLoC with ChangeNotifier{
         imageURL:
         "https://d26oc3sg82pgk3.cloudfront.net/files/media/edit/image/40377/square_thumb%402x.jpg",
         title: "Test Title",
-        shortDescription: "ok this is a short description"),
+        shortDescription: "ok this is a short description",
+        comments: ["I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that"],
+        numLikes: 0, numDislikes: 0, numReposts: 0),
   ];
 
   List<Post> get posts => _posts;
-
-  increaseReposts(index){
-    _posts[index].numReposts++;
-    notifyListeners();
-  }
-
-  increaseLikes(index){
-    _posts[index].numLikes++;
-    notifyListeners();
-  }
-
-  increaseDislikes(index){
-    _posts[index].numDislikes++;
-    notifyListeners();
-  }
 
   set posts(newPostList){
     _posts = newPostList;
@@ -103,7 +125,7 @@ class PostsListBLoC with ChangeNotifier{
   }
 
   addComment(index, comment){
-    _posts[index].comments.add(comment);
+    _posts[index].comments?.add(comment);
     notifyListeners();
   }
 

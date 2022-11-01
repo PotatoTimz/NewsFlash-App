@@ -1,11 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:groupproject/views/HomePage/PictureViewerBuilder.dart';
+import 'package:groupproject/views/HomePageTabs/PictureViewerBuilder.dart';
+import 'package:groupproject/views/HomePageTabs/OnlineHomeScreenBuilder.dart';
 import 'package:provider/provider.dart';
-
-import '../../models/Post.dart';
-import 'HomeScreenBuilder.dart';
+import '../models/Post.dart';
+import 'HomePageTabs/OfflineHomeScreenBuilder.dart';
 
 
 void initializeAllPosts() {
@@ -35,7 +33,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     PostsListBLoC postsListBLoC = context.watch<PostsListBLoC>();
 
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title!),
@@ -43,9 +41,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
         body: const TabBarView(
           children:[
-            ListViewHomePage(),
+            TestListView(),
             PictureViewerBuilder(),
-            Text("work in progress")
+            Text("work in progress"),
+            ListViewHomePage(),
           ],
         ),
 
@@ -55,7 +54,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             tabs: [
               Tab(text: "HomeScreen", icon: Icon(Icons.home),),
               Tab(text: "PictureViewer", icon: Icon(Icons.photo)),
-              Tab(text: "Polls and Surveys", icon: Icon(Icons.poll))
+              Tab(text: "Polls and Surveys", icon: Icon(Icons.poll)),
+              Tab(text: "Offline Viewer", icon: Icon(Icons.download)),
             ],
           ),
         ),
@@ -76,7 +76,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
 
     var newPost = await Navigator.pushNamed(context, r'/createPostPage');
-    postsListBLoC.addPost(newPost);
+    if (newPost == null){
+      print("Nothing was inputed");
+    }
+    else{
+      insertPost(newPost);
+    }
   }
 
 
