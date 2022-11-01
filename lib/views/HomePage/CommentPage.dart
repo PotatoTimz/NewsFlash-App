@@ -22,8 +22,7 @@ class _CommentPageState extends State<CommentPage> {
   Widget build(BuildContext context) {
 
     PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
-    print("$index");
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title!),
@@ -31,15 +30,58 @@ class _CommentPageState extends State<CommentPage> {
       body: ListView(
         children: [
           Container(
-            padding: const EdgeInsets.all(15),
-            child: Column(
+            padding: EdgeInsets.all(15),
+            child: buildLongPost(context, selectedIndex),
+          ),
+
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12)
+            ),
+            child: Row(
               children: [
-                buildLongPost(context, selectedIndex),
+                const Text(
+                  "Comments",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25
+                  ),
+                ),
+                const SizedBox(width: 15,),
+                Text("${postsListBLoC.posts[selectedIndex!].comments.length!}"),
               ],
             ),
           ),
+
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: postsListBLoC.posts[selectedIndex!].comments.length,
+              itemBuilder: (context, index){
+                index-1;
+                return Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey)
+                  ),
+                  child:buildCommentSection(context, index),
+                );
+              }
+          ),
+
         ],
       )
     );
   }
+}
+
+Widget buildCommentSection(context, index){
+
+  PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
+
+  return Container(
+      padding: EdgeInsets.all(15),
+      child: Text(
+          postsListBLoC.posts[selectedIndex!].comments[index]
+      )
+  );
 }

@@ -199,11 +199,9 @@ Widget buildLongPost(context, index){
       //Description
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child:Flexible(
-          child: Text(
-            "${postsListBLoC.posts[index].longDescription}",
-            style: const TextStyle(fontSize: 15),
-          ),
+        child: Text(
+          "${postsListBLoC.posts[index].longDescription}",
+          style: const TextStyle(fontSize: 15),
         ),
       ),
       const SizedBox(height: 20),

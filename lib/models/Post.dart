@@ -9,12 +9,13 @@ class Post{
   String? imageURL;
   String? title;
   //CommentPage
-  // List<Comment> = [];
+  List<String> comments = ["I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that","I want to rock and roll night and party everyday!", "wow what an informative post thanks for that"];
 
   int numComments = 0;
   int numReposts = 0;
   int numLikes = 0;
   int numDislikes = 0;
+
 
   Post({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription});
 
@@ -98,6 +99,11 @@ class PostsListBLoC with ChangeNotifier{
 
   updatePost(index, newPost){
     _posts[index] = newPost;
+    notifyListeners();
+  }
+
+  addComment(index, comment){
+    _posts[index].comments.add(comment);
     notifyListeners();
   }
 
