@@ -47,6 +47,17 @@ class Post{
     };
   }
 
+  void addComment(newComment){
+    comments?.add(newComment);
+  }
+
+  void deleteComment(commentIndex){
+    comments?.removeAt(commentIndex);
+  }
+
+  void editComment(newComment, commentIndex){
+    comments![commentIndex] = newComment;
+  }
 
   @override
   String toString() {

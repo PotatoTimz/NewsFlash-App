@@ -3,6 +3,7 @@ import 'package:groupproject/views/HomePageTabs/PictureViewerBuilder.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineHomeScreenBuilder.dart';
 import 'package:provider/provider.dart';
 import '../models/Post.dart';
+import 'HomePageTabs/FireBaseEditors.dart';
 import 'HomePageTabs/OfflineHomeScreenBuilder.dart';
 
 

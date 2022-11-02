@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:groupproject/models/Post.dart';
 import 'package:groupproject/views/HomePageTabs/CommentPage.dart';
 import 'package:groupproject/views/HomePage.dart';
+import 'package:groupproject/views/HomePageTabs/CreateCommentPage.dart';
 import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
 void main() {
@@ -37,11 +38,10 @@ class MyApp extends StatelessWidget {
               ),
               home: const LoginPage(title: 'Flutter Demo Home Page'),
               routes: {
-                '/homePage': (context) =>
-                const HomePageWidget(title: "HomePage"),
-                '/createPostPage': (context) =>
-                const CreatePostWidget(title: "Create a Post"),
-                '/commentPage': (context) => CommentPage()
+                '/homePage': (context) => const HomePageWidget(title: "HomePage"),
+                '/createPostPage': (context) => const CreatePostWidget(title: "Create a Post"),
+                '/commentPage': (context) => const CommentPage(),
+                '/createCommentPage': (context) => const CreateCommentPage(),
               },
             );
           }

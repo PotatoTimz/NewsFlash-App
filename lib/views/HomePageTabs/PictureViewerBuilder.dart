@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/Post.dart';
+import 'FireBaseEditors.dart';
 import 'OfflineHomeScreenBuilder.dart';
 
 class PictureViewerBuilder extends StatefulWidget {
@@ -46,9 +47,9 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
                           });
                           var updatedPost = await Navigator.pushNamed(
                               context, '/commentPage',
-                              arguments: {'post' : post}
+                              arguments: {'fireBaseInstance': fireBaseInstance}
                           );
-                          updatePost(index, updatedPost);
+                          updatePost(index, updatedPost, fireBaseInstance);
                         },
                         child: Container(
                           decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
@@ -67,12 +68,6 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
     // return
   }
 
-  Future updatePost(selectedIndex, updatedPost) async{
-    QuerySnapshot querySnapshot = await fireBaseInstance.get();
-    Post post =  Post.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
-
-    await FirebaseFirestore.instance.collection('posts').doc(post.reference?.id.toString()).set(updatedPost.Tomap());
-  }
 
 }
 
