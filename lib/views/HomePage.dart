@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/HomePageTabs/PictureViewerBuilder.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineHomeScreenBuilder.dart';
+import 'package:groupproject/views/SearchPage.dart';
 import 'package:provider/provider.dart';
 import '../models/Post.dart';
 import 'HomePageTabs/FireBaseEditors.dart';
@@ -38,6 +39,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title!),
+          actions: [
+            IconButton(onPressed: () {
+              showSearch(context: context, delegate: SearchPage());
+            }, icon: const Icon(Icons.search))
+          ],
         ),
 
         body: const TabBarView(
@@ -87,4 +93,3 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
 
 }
-
