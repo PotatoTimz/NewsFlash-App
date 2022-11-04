@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:groupproject/models/Post.dart';
-import 'package:groupproject/views/HomePageTabs/CommentPage.dart';
+import 'package:groupproject/views/CommentPage.dart';
 import 'package:groupproject/views/HomePage.dart';
-import 'package:groupproject/views/HomePageTabs/CreateCommentPage.dart';
+import 'package:groupproject/views/HomePageTabs/OnlineViewMode/CreateCommentPage.dart';
 import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
+
+import 'models/PostOffline.dart';
 void main() {
   runApp(
       MultiProvider(
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/homePage': (context) => const HomePageWidget(title: "HomePage"),
                 '/createPostPage': (context) => const CreatePostWidget(title: "Create a Post"),
-                '/commentPage': (context) => const CommentPage(),
+                '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
               },
             );
@@ -67,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    PostsListBLoC postsListBLoC = context.watch<PostsListBLoC>();
 
     return Scaffold(
       appBar: AppBar(

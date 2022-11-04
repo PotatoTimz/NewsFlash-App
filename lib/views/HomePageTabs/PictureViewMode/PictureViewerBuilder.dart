@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/Post.dart';
-import 'FireBaseEditors.dart';
-import 'OfflineHomeScreenBuilder.dart';
+import '../../../models/PostOnline.dart';
+import '../../DatabaseEditors.dart';
+import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 
 class PictureViewerBuilder extends StatefulWidget {
   const PictureViewerBuilder({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
                     ,
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (BuildContext context, int index) {
-                      Post post = Post.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
+                      PostOnline post = PostOnline.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
                       return GestureDetector(
                         onTap: (){
                           setState(() {
@@ -49,7 +49,9 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
                               context, '/commentPage',
                               arguments: {'fireBaseInstance': fireBaseInstance}
                           );
-                          updatePost(index, updatedPost, fireBaseInstance);
+                          if(updatedPost != null) {
+                            updateOfflineDatabase(index, updatedPost, fireBaseInstance);
+                          }
                         },
                         child: Container(
                           decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),

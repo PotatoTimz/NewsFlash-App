@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/Post.dart';
+import '../../../models/PostOffline.dart';
+import '../../../models/PostOnline.dart';
+import '../../DatabaseEditors.dart';
 
 int? selectedIndex;
 
-class ListViewHomePage extends StatefulWidget {
-  const ListViewHomePage({Key? key}) : super(key: key);
+class OfflineHomeScreen extends StatefulWidget {
+  const OfflineHomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<ListViewHomePage> createState() => _ListViewHomePageState();
+  State<OfflineHomeScreen> createState() => _OfflineHomeScreenState();
 }
 
-class _ListViewHomePageState extends State<ListViewHomePage> {
+class _OfflineHomeScreenState extends State<OfflineHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +32,12 @@ class _ListViewHomePageState extends State<ListViewHomePage> {
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
-                    // print("selected index $selectedIndex");
                   });
                 },
                 onLongPress: (){
                   setState(() {
                     selectedIndex = 1^1000;
                   });
-                },
-                onDoubleTap: (){
-                  selectedIndex = index;
-                  goToCommentPage(context);
                 },
                 child: Container(
                   decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
@@ -83,9 +80,9 @@ Widget buildShortPost(context, index){
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                   IconButton(
                     onPressed: () {
-                      _showPostOptions(context, index);
+                      _showDeleteDialog(context, index);
                     },
-                    icon: const Icon(Icons.more_vert),
+                    icon: const Icon(Icons.more_horiz),
                   ),
                 ],
               )
@@ -164,7 +161,7 @@ Widget buildLongPost(context, index){
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   IconButton(
                     onPressed: () {
-                      _showPostOptions(context, index);
+                      _showDeleteDialog(context, index);
                     },
                     icon: const Icon(Icons.more_vert),
                   ),
@@ -211,76 +208,7 @@ Widget buildLongPost(context, index){
       //image section
       const SizedBox(height: 20,),
 
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.chat_bubble_outline,
-              size: 20,
-            ),
-          ),
-          Text("  ${postsListBLoC.posts[index].comments?.length}"),
-          const SizedBox(width: 20),
-          IconButton(
-            onPressed: () {
-            },
-            icon: const Icon(Icons.repeat, size: 20),
-          ),
-          Text(" ${postsListBLoC.posts[index].numReposts}"),
-          const SizedBox(width: 20),
-          IconButton(
-            onPressed: () {
-            },
-            icon:
-            const Icon(Icons.thumb_up_outlined, size: 20),
-          ),
-          Text("  ${postsListBLoC.posts[index].numLikes}"),
-          const SizedBox(width: 20),
-          IconButton(
-            onPressed: () {
-            },
-            icon: const Icon(Icons.thumb_down_outlined,
-                size: 20),
-          ),
-          Text("  ${postsListBLoC.posts[index].numDislikes}"),
-        ],
-      ),
     ],
-  );
-}
-
-_showPostOptions(context, index){
-  showDialog(
-      context: context,
-      builder: (context){
-        return SimpleDialog(
-          title: const Text("What would you like to do"),
-          children: [
-            SimpleDialogOption(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                  goToUpdatePostPage(context, index);
-                },
-                child: const Text("Edit post")
-            ),
-            SimpleDialogOption(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                  _showDeleteDialog(context, index);
-                },
-                child: const Text("Delete post")
-            ),
-            SimpleDialogOption(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Save post")
-            ),
-          ],
-        );
-      }
   );
 }
 
@@ -302,7 +230,8 @@ _showDeleteDialog(context, index){
             ),
             TextButton(
                 onPressed: (){
-                  postsListBLoC.removePost(index);
+                  print(index);
+                  deleteOffDatabase(index, context);
                   Navigator.of(context).pop();
                 },
                 child: Text("Delete")
@@ -311,11 +240,4 @@ _showDeleteDialog(context, index){
         );
       }
   );
-}
-
-Future<void> goToUpdatePostPage(context, index) async{
-  PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
-
-  var newPost = await Navigator.pushNamed(context, r'/createPostPage');
-  postsListBLoC.updatePost(index, newPost);
 }

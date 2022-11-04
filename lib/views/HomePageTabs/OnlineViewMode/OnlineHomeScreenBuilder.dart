@@ -1,24 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/Post.dart';
-import 'FireBaseEditors.dart';
-import 'OfflineHomeScreenBuilder.dart';
+import '../../../models/PostOffline.dart';
+import '../../../models/PostOnline.dart';
+import '../../DatabaseEditors.dart';
+import '../../HomePage.dart';
+import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 
-class TestListView extends StatefulWidget {
-  const TestListView({Key? key}) : super(key: key);
+class OnlineHomeScreen extends StatefulWidget {
+   OnlineHomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<TestListView> createState() => _TestListViewState();
+  State<OnlineHomeScreen> createState() => _OnlineHomeScreenState();
 }
 
-class _TestListViewState extends State<TestListView> {
+class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
 
   final fireBaseInstance = FirebaseFirestore.instance.collection('posts');
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder(
       stream: fireBaseInstance.snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -31,7 +33,7 @@ class _TestListViewState extends State<TestListView> {
           return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (context, index){
-                Post post = Post.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
+                PostOnline post = PostOnline.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
                 return Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -63,7 +65,6 @@ class _TestListViewState extends State<TestListView> {
                         padding: const EdgeInsets.all(15),
                         child: selectedIndex!= index ? buildOnlineShortPost(post, context, index, fireBaseInstance) : buildOnlineLongPost(post, context, index, fireBaseInstance),
                       )
-
                   )
                 );
               }
@@ -77,12 +78,13 @@ class _TestListViewState extends State<TestListView> {
 Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async{
 
   var newPost = await Navigator.pushNamed(context, r'/createPostPage');
-  updatePost(index, newPost, fireBaseInstance);
+  updateOfflineDatabase(index, newPost, fireBaseInstance);
 }
 
 
 
 Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
+
 
   return Column(
     children: [
@@ -107,7 +109,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
-                      _showPostOptions(context, index, fireBaseInstance);
+                      _showPostOptions(context, index, fireBaseInstance, post);
                     },
                     icon: const Icon(Icons.more_horiz),
                   ),
@@ -170,7 +172,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           IconButton(
             onPressed: () {
               post.numReposts += 1;
-              updatePost(selectedIndex, post, fireBaseInstance);
+              updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Reposts: ${post.numReposts}");
             },
             icon: const Icon(Icons.repeat, size: 20),
@@ -180,7 +182,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           IconButton(
             onPressed: () {
               post.numLikes += 1;
-              updatePost(selectedIndex, post, fireBaseInstance);
+              updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Likes: ${post.numLikes}");
             },
             icon:
@@ -191,7 +193,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           IconButton(
             onPressed: () {
               post.numDislikes += 1;
-              updatePost(selectedIndex, post, fireBaseInstance);
+              updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Dislikes: ${post.numDislikes}");
             },
             icon: const Icon(Icons.thumb_down_outlined,
@@ -229,7 +231,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
-                      _showPostOptions(context, index, fireBaseInstance);
+                      _showPostOptions(context, index, fireBaseInstance, post);
                     },
                     icon: const Icon(Icons.more_vert),
                   ),
@@ -283,7 +285,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
   );
 }
 
-_showPostOptions(context, index, fireBaseInstance){
+_showPostOptions(context, index, fireBaseInstance, post){
   showDialog(
       context: context,
       builder: (context){
@@ -300,13 +302,15 @@ _showPostOptions(context, index, fireBaseInstance){
             SimpleDialogOption(
                 onPressed: (){
                   Navigator.of(context).pop();
-                  _showDeleteDialog(context, index, fireBaseInstance);
+                  _showDeleteDialog(context, fireBaseInstance);
                 },
                 child: const Text("Delete post")
             ),
             SimpleDialogOption(
                 onPressed: (){
                   Navigator.of(context).pop();
+                  PostOffline downloadedPost = PostOffline(userName: post.userName, timeString: post.timeString, longDescription: post.longDescription, shortDescription: post.shortDescription, imageURL: post.imageURL, title: post.title, id: lastInsertedId+1);
+                  addOfflineDatabase(downloadedPost, context);
                 },
                 child: const Text("Save post")
             ),
@@ -316,7 +320,7 @@ _showPostOptions(context, index, fireBaseInstance){
   );
 }
 
-_showDeleteDialog(context, index, fireBaseInstance){
+_showDeleteDialog(context, fireBaseInstance){
   showDialog(context: context,
       barrierDismissible: false,                              //doesnt allow user to click of alert pop up
       builder: (context){
@@ -332,7 +336,7 @@ _showDeleteDialog(context, index, fireBaseInstance){
             ),
             TextButton(
                 onPressed: (){
-                  deletePost(selectedIndex, fireBaseInstance);
+                  deleteOfflineDatabase(selectedIndex, fireBaseInstance);
                   Navigator.of(context).pop();
                 },
                 child: Text("Delete")

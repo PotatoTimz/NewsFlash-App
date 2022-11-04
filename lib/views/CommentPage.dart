@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:groupproject/views/HomePageTabs/FireBaseEditors.dart';
-import 'package:groupproject/views/HomePageTabs/OfflineHomeScreenBuilder.dart';
+import 'package:groupproject/views/DatabaseEditors.dart';
+import 'package:groupproject/views/HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
 
-import '../../models/Post.dart';
-import 'OnlineHomeScreenBuilder.dart';
+import '../models/PostOnline.dart';
+import 'HomePageTabs/OnlineViewMode/OnlineHomeScreenBuilder.dart';
 
 class CommentPage extends StatefulWidget {
 
-  final Post? post;
+  CommentPage({Key? key, this.post}) : super(key: key);
 
-  const CommentPage({Key? key, this.post}) : super(key: key);
+  PostOnline? post;
 
   @override
   State<CommentPage> createState() => _CommentPageState();
@@ -42,7 +42,7 @@ class _CommentPageState extends State<CommentPage> {
             }
             else {
               print("Data Loaded!");
-              Post post = Post.fromMap(snapshot.data.docs[selectedIndex].data(), reference: snapshot.data.docs[selectedIndex].reference);
+              PostOnline post = PostOnline.fromMap(snapshot.data.docs[selectedIndex].data(), reference: snapshot.data.docs[selectedIndex].reference);
               return ListView(
                 children: [
 
@@ -101,7 +101,7 @@ Future<void> goToCreateCommentPage(context, post, fireBaseInstance) async{
   }
   else{
     post.addComment(newComment);
-    updatePost(selectedIndex, post, fireBaseInstance);
+    updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
   }
 }
 
@@ -113,7 +113,7 @@ Future<void> goToEditCommentPage(context, post, fireBaseInstance, commentIndex) 
   }
   else{
     post.editComment(newComment, commentIndex);
-    updatePost(selectedIndex, post, fireBaseInstance);
+    updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
   }
 }
 
@@ -182,7 +182,7 @@ _showDeleteCommentDialog(context, post, index, fireBaseInstance){
             TextButton(
                 onPressed: (){
                   post.deleteComment(index);
-                  updatePost(selectedIndex, post, fireBaseInstance);
+                  updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
                   Navigator.of(context).pop();
                 },
                 child: Text("Delete")

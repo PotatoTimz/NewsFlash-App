@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:groupproject/models/Post.dart';
+import 'package:groupproject/models/PostOnline.dart';
 import 'package:provider/provider.dart';
 
 class CreatePostWidget extends StatefulWidget {
@@ -23,8 +23,6 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-    PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
 
     return Scaffold(
       appBar: AppBar(title:Text(widget.title!)),
@@ -84,7 +82,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
 
             ElevatedButton(
                 onPressed:(){
-                  Post newPost = Post(
+                  PostOnline newPost = PostOnline(
                     userName: userName,
                     timeString: timeString,
                     longDescription: longDescription,
