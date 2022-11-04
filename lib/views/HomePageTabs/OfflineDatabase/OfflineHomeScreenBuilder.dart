@@ -231,7 +231,7 @@ _showDeleteDialog(context, index){
             TextButton(
                 onPressed: (){
                   print(index);
-                  deleteOffDatabase(index, context);
+                  deleteOfflineDatabase(index, context);
                   Navigator.of(context).pop();
                 },
                 child: Text("Delete")

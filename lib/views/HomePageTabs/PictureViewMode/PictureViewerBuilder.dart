@@ -50,7 +50,7 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
                               arguments: {'fireBaseInstance': fireBaseInstance}
                           );
                           if(updatedPost != null) {
-                            updateOfflineDatabase(index, updatedPost, fireBaseInstance);
+                            updateOnlineDatabase(index, updatedPost, fireBaseInstance);
                           }
                         },
                         child: Container(

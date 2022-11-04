@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/Account.dart';
-import '../../models/Post.dart';
-import 'FireBaseEditors.dart';
-import 'OfflineHomeScreenBuilder.dart';
+import '../../models/PostOnline.dart';
+import 'OfflineDatabase/OfflineHomeScreenBuilder.dart';
+import '../../views/DatabaseEditors.dart';
 
 class ProfilePageBuilder extends StatefulWidget {
   const ProfilePageBuilder({Key? key}) : super(key: key);
@@ -66,11 +66,11 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                   GridView.builder(
                       shrinkWrap: true,
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (BuildContext context, int index) {
-                        Post post = Post.fromMap(
+                        PostOnline post = PostOnline.fromMap(
                             snapshot.data.docs[index].data(),
                             reference: snapshot.data.docs[index].reference);
                         return GestureDetector(
@@ -87,7 +87,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                 context, '/commentPage', arguments: {
                               'fireBaseInstance': fireBaseInstance
                             });
-                            updatePost(index, updatedPost, fireBaseInstance);
+                            updateOnlineDatabase(index, updatedPost, fireBaseInstance);
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -111,3 +111,4 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
 Future<void> goToCommentPage(context) async {
   var newPost = await Navigator.pushNamed(context, r'/commentPage');
 }
+

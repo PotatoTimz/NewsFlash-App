@@ -78,7 +78,7 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
 Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async{
 
   var newPost = await Navigator.pushNamed(context, r'/createPostPage');
-  updateOfflineDatabase(index, newPost, fireBaseInstance);
+  updateOnlineDatabase(index, newPost, fireBaseInstance);
 }
 
 
@@ -172,7 +172,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           IconButton(
             onPressed: () {
               post.numReposts += 1;
-              updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
+              updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Reposts: ${post.numReposts}");
             },
             icon: const Icon(Icons.repeat, size: 20),
@@ -182,7 +182,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           IconButton(
             onPressed: () {
               post.numLikes += 1;
-              updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
+              updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Likes: ${post.numLikes}");
             },
             icon:
@@ -193,7 +193,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           IconButton(
             onPressed: () {
               post.numDislikes += 1;
-              updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
+              updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Dislikes: ${post.numDislikes}");
             },
             icon: const Icon(Icons.thumb_down_outlined,
@@ -336,7 +336,7 @@ _showDeleteDialog(context, fireBaseInstance){
             ),
             TextButton(
                 onPressed: (){
-                  deleteOfflineDatabase(selectedIndex, fireBaseInstance);
+                  deleteOnlineDatabase(selectedIndex, fireBaseInstance);
                   Navigator.of(context).pop();
                 },
                 child: Text("Delete")

@@ -11,13 +11,13 @@ Future insertOnlineDatabase(newPost) async{
   await FirebaseFirestore.instance.collection('posts').doc().set(newPost.toMapOffline());
 }
 
-Future updateOfflineDatabase(selectedIndex, updatedPost, fireBaseInstance) async{
+Future updateOnlineDatabase(selectedIndex, updatedPost, fireBaseInstance) async{
   QuerySnapshot querySnapshot = await fireBaseInstance.get();
   PostOnline post =  PostOnline.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
   await FirebaseFirestore.instance.collection('posts').doc(post.reference?.id.toString()).set(updatedPost.toMapOffline());
 }
 
-Future deleteOfflineDatabase(selectedIndex, fireBaseInstance) async{
+Future deleteOnlineDatabase(selectedIndex, fireBaseInstance) async{
   QuerySnapshot querySnapshot = await fireBaseInstance.get();
   PostOnline post = PostOnline.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
 
@@ -31,7 +31,7 @@ Future initializeOfflineDataBase(context) async{
   lastInsertedId = posts[posts.length-1].id!;
 }
 
-void deleteOffDatabase(int selectedIndex, context){
+void deleteOfflineDatabase(int selectedIndex, context){
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
 
   model.deletePostByID(postsListBLoC.posts[selectedIndex].id!);

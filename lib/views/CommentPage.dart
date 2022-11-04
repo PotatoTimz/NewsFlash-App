@@ -101,7 +101,7 @@ Future<void> goToCreateCommentPage(context, post, fireBaseInstance) async{
   }
   else{
     post.addComment(newComment);
-    updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
+    updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
   }
 }
 
@@ -113,7 +113,7 @@ Future<void> goToEditCommentPage(context, post, fireBaseInstance, commentIndex) 
   }
   else{
     post.editComment(newComment, commentIndex);
-    updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
+    updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
   }
 }
 
@@ -182,7 +182,7 @@ _showDeleteCommentDialog(context, post, index, fireBaseInstance){
             TextButton(
                 onPressed: (){
                   post.deleteComment(index);
-                  updateOfflineDatabase(selectedIndex, post, fireBaseInstance);
+                  updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
                   Navigator.of(context).pop();
                 },
                 child: Text("Delete")
