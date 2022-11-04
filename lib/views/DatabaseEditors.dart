@@ -1,20 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:groupproject/views/HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import 'package:provider/provider.dart';
 
 import '../models/PostOffline.dart';
 import '../models/PostOnline.dart';
 import 'HomePage.dart';
-import 'HomePageTabs/OfflineDatabase/post_model.dart';
 
 Future insertOnlineDatabase(newPost) async{
-  await FirebaseFirestore.instance.collection('posts').doc().set(newPost.toMapOffline());
+  await FirebaseFirestore.instance.collection('posts').doc().set(newPost.toMapOnline());
 }
 
 Future updateOnlineDatabase(selectedIndex, updatedPost, fireBaseInstance) async{
   QuerySnapshot querySnapshot = await fireBaseInstance.get();
   PostOnline post =  PostOnline.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
-  await FirebaseFirestore.instance.collection('posts').doc(post.reference?.id.toString()).set(updatedPost.toMapOffline());
+  await FirebaseFirestore.instance.collection('posts').doc(post.reference?.id.toString()).set(updatedPost.toMapOnline());
 }
 
 Future deleteOnlineDatabase(selectedIndex, fireBaseInstance) async{

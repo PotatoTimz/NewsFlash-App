@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/Account.dart';
+import '../../../models/Account.dart';
 
 class SearchPage extends SearchDelegate {
   // Filler account list

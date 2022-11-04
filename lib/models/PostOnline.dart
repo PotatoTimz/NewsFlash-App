@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostOnline{
@@ -44,18 +43,6 @@ class PostOnline{
       'numReposts' :this.numReposts,
       'numLikes':this.numLikes,
       'numDislikes':this.numDislikes,
-    };
-  }
-
-  Map<String, Object?> toMapOffline(){
-    return{
-      // 'name' : this.name,
-      'userName' :this.userName,
-      'timeString':this.timeString,
-      'longDescription' :this.longDescription,
-      'shortDescription':this.shortDescription,
-      'imageURL':this.imageURL,
-      'title' :this.title,
     };
   }
 

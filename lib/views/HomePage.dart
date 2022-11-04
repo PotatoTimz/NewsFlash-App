@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/HomePageTabs/PictureViewMode/PictureViewerBuilder.dart';
-import 'package:groupproject/views/SearchPage.dart';
-import 'package:provider/provider.dart';
-import '../models/PostOffline.dart';
-import '../models/PostOnline.dart';
+import 'package:groupproject/views/HomePageTabs/SearchPage/SearchPage.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePageBuilder.dart';
 import 'DatabaseEditors.dart';
 import 'HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
