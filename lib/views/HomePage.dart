@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/HomePageTabs/PictureViewerBuilder.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineHomeScreenBuilder.dart';
+import 'package:groupproject/views/HomePageTabs/ProfilePageBuilder.dart';
 import 'package:groupproject/views/SearchPage.dart';
 import 'package:provider/provider.dart';
 import '../models/Post.dart';
@@ -35,7 +36,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     PostsListBLoC postsListBLoC = context.watch<PostsListBLoC>();
 
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title!),
@@ -52,6 +53,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             PictureViewerBuilder(),
             Text("work in progress"),
             ListViewHomePage(),
+            ProfilePageBuilder(),
           ],
         ),
 
@@ -63,6 +65,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Tab(text: "PictureViewer", icon: Icon(Icons.photo)),
               Tab(text: "Polls and Surveys", icon: Icon(Icons.poll)),
               Tab(text: "Offline Viewer", icon: Icon(Icons.download)),
+              Tab(text: "Profile", icon: Icon(Icons.account_box)),
             ],
           ),
         ),
