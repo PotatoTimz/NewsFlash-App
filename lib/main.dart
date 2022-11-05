@@ -7,15 +7,14 @@ import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
 
 import 'models/PostOffline.dart';
+
 void main() {
-  runApp(
-      MultiProvider(
-        child: const MyApp(),
-        providers: [
-          ChangeNotifierProvider(create: (value) => PostsListBLoC()),
-        ],
-      )
-  );
+  runApp(MultiProvider(
+    child: const MyApp(),
+    providers: [
+      ChangeNotifierProvider(create: (value) => PostsListBLoC()),
+    ],
+  ));
   // runApp(const MyApp());
 }
 
@@ -39,18 +38,18 @@ class MyApp extends StatelessWidget {
               ),
               home: const LoginPage(title: 'Flutter Demo Home Page'),
               routes: {
-                '/homePage': (context) => const HomePageWidget(title: "HomePage"),
-                '/createPostPage': (context) => const CreatePostWidget(title: "Create a Post"),
+                '/homePage': (context) =>
+                    const HomePageWidget(title: "HomePage"),
+                '/createPostPage': (context) =>
+                    const CreatePostWidget(title: "Create a Post"),
                 '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
               },
             );
-          }
-          else {
+          } else {
             return CircularProgressIndicator();
           }
-        }
-    );
+        });
   }
 }
 
@@ -64,28 +63,97 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     PostsListBLoC postsListBLoC = context.watch<PostsListBLoC>();
 
     return Scaffold(
-      appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: goToHomePage,
-        tooltip: 'Login',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body:
+          buildLogin(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  Future<void> goToHomePage() async{
+  Future<void> goToHomePage() async {
     var loginStatus = await Navigator.pushNamed(context, r'/homePage');
   }
 
+  Widget buildLogin() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: const Text(
+            "B-REEL",
+            style: TextStyle(
+                color: Colors.teal,
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Raleway'),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: const Text(
+            "Sign in",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Form(
+            key: formKey,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Column(children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.teal, width: 5.0),
+                          borderRadius: BorderRadius.circular(50.0)),
+                      label: Text("Username"),
+                      hintText: "Username"),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                          borderRadius: BorderRadius.circular(50)),
+                      label: Text("Password"),
+                      hintText: "Password "),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25))),
+                    onPressed: goToHomePage,
+                    child: const Text(
+                      "Log In",
+                      style: TextStyle(fontSize: 20),
+                    )),
+                TextButton(onPressed: () {}, child: Text('Forgot Password')),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don't have an account?"),
+                    TextButton(onPressed: () {}, child: Text('Sign Up'))
+                  ],
+                )
+              ]),
+            )),
+      ],
+    );
+  }
 }

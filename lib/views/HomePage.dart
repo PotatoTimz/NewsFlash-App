@@ -20,7 +20,6 @@ class HomePageWidget extends StatefulWidget {
 }
 
 class _HomePageWidgetState extends State<HomePageWidget> {
-
   @override
   void initState() {
     super.initState();
@@ -29,27 +28,26 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title!),
           actions: [
-            IconButton(onPressed: () {
-              showSearch(context: context, delegate: SearchPage());
-            }, icon: const Icon(Icons.search)),
             IconButton(
-                onPressed: (){
+                onPressed: () {
+                  showSearch(context: context, delegate: SearchPage());
+                },
+                icon: const Icon(Icons.search)),
+            IconButton(
+                onPressed: () {
                   readOfflineDatabase();
                 },
-                icon: Icon(Icons.data_object)
-            ),
+                icon: Icon(Icons.data_object)),
           ],
         ),
-
         body: TabBarView(
-          children:[
+          children: [
             OnlineHomeScreen(),
             PictureViewerBuilder(),
             Text("work in progress"),
@@ -57,12 +55,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ProfilePageBuilder(),
           ],
         ),
-
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(color: Colors.lightBlue),
           child: const TabBar(
             tabs: [
-              Tab(text: "HomeScreen", icon: Icon(Icons.home),),
+              Tab(
+                text: "HomeScreen",
+                icon: Icon(Icons.home),
+              ),
               Tab(text: "PictureViewer", icon: Icon(Icons.photo)),
               Tab(text: "Polls and Surveys", icon: Icon(Icons.poll)),
               Tab(text: "Offline Viewer", icon: Icon(Icons.download)),
@@ -70,9 +70,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ],
           ),
         ),
-
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
+          onPressed: () {
             goToCreatePostPage(context);
           },
           tooltip: 'Make Post',
@@ -82,16 +81,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
-  Future<void> goToCreatePostPage(context) async{
-
+  Future<void> goToCreatePostPage(context) async {
     var newPost = await Navigator.pushNamed(context, r'/createPostPage');
-    if (newPost == null){
+    if (newPost == null) {
       print("Nothing was inputed");
-    }
-    else{
+    } else {
       insertOnlineDatabase(newPost);
     }
   }
-
-
 }
