@@ -26,7 +26,16 @@ Future initializeOfflineDataBase(context) async{
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
   List posts = await model.getAllPosts();
   postsListBLoC.posts = posts as List<PostOffline>;
-  lastInsertedId = posts[posts.length-1].id!;
+
+  try {
+    print("Loading saved offline database!");
+    lastInsertedId = posts[posts.length - 1].id!;
+  }
+  catch(RangeError){
+    print("No offline database currently found!");
+    lastInsertedId = 0;
+  }
+
 }
 
 void deleteOfflineDatabase(int selectedIndex, context){

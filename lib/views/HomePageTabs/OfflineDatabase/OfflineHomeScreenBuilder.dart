@@ -230,7 +230,6 @@ _showDeleteDialog(context, index){
             ),
             TextButton(
                 onPressed: (){
-                  print(index);
                   deleteOfflineDatabase(index, context);
                   Navigator.of(context).pop();
                 },
