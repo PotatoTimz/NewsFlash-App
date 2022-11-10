@@ -1,3 +1,10 @@
+/*
+  PostModel contains multiple classes uses to edit the sqlite
+  database
+  @author Andre Alix
+  @version Group Project Check-In
+  @since 2022-11-11
+ */
 
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -5,8 +12,9 @@ import '../../../models/PostOffline.dart';
 import 'db_utils.dart';
 
 class PostModel {
-  Future<int> insertPosts(PostOffline post) async{
 
+  //adds a post to the sqlite database
+  Future<int> insertPosts(PostOffline post) async{
     final db = await DBUtils.init();
     // print("model : $grade");
     // print(grade.toMap());
@@ -17,9 +25,8 @@ class PostModel {
     );
   }
 
+  //deletes a post to from the sqlite database
   Future<int> deletePostByID(int id) async{
-    //This needs to be present in any queries, updates, etc.
-    //you do with your database
     final db = await DBUtils.init();
     return db.delete(
       'downloaded_posts_manager',
@@ -28,9 +35,8 @@ class PostModel {
     );
   }
 
+  //updates post from the sqlite database
   Future<int> updatePost(PostOffline post) async{
-    //This needs to be present in any queries, updates, etc.
-    //you do with your database
     final db = await DBUtils.init();
     return db.update(
       'downloaded_posts_manager',
@@ -40,10 +46,8 @@ class PostModel {
     );
   }
 
-
+  //gets all post from the sqlite database
   Future getAllPosts() async{
-    //This needs to be present in any queries, updates, etc.
-    //you do with your database
     final db = await DBUtils.init();
     final List maps = await db.query('downloaded_posts_manager');
     List<PostOffline> result = [];

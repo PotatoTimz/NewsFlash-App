@@ -1,6 +1,15 @@
+/*
+ OnlineHomeScreen creates a gridview using snapshot instances found within the firebase
+ database.
+ The data in the firebase database is turned into an OnlinePost and is sent and is used
+ to populate the gridview.
+ @author Andre Alix
+ @version Group Project Check-In
+ @since 2022-11-11
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
@@ -12,6 +21,12 @@ class PictureViewerBuilder extends StatefulWidget {
   State<PictureViewerBuilder> createState() => _PictureViewerBuilderState();
 }
 
+/*
+  PictureViewerBuilder will create a gridview containing pictures from all the posts
+  found within the online database.
+  Double tapping the image will bring the up the comment page for the specific post
+  similar to OnlineHomeScreenBuilder
+ */
 class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
 
   final fireBaseInstance = FirebaseFirestore.instance.collection('posts');
@@ -69,8 +84,6 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
     );
     // return
   }
-
-
 }
 
 Future<void> goToCommentPage(context) async{

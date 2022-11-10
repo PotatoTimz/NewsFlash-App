@@ -1,12 +1,22 @@
+/*
+  OfflineHomeScreenBuilder creates a Listview containing all
+  of the posts found within the sqlite database and allows user to
+  both view and delete the given OfflinePosts
+  "selectedIndex" is an integer that contains the chosen post of the
+  user.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../models/PostOffline.dart';
-import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 
 int? selectedIndex;
 
+/*
+  OfflineHomeScreen creates a widget that contains all of the
+  offline posts being stored within the PostListBLoC
+ */
 class OfflineHomeScreen extends StatefulWidget {
   const OfflineHomeScreen({Key? key}) : super(key: key);
 
@@ -51,10 +61,11 @@ class _OfflineHomeScreenState extends State<OfflineHomeScreen> {
   }
 }
 
-Future<void> goToCommentPage(context) async{
-  var newPost = await Navigator.pushNamed(context, r'/commentPage');
-}
-
+/*
+  buildShortPost creates a smaller version of the OfflinePost that is shown
+  by default it contains smaller font and contains the "shortDescription"
+  to make it easier to navigate
+ */
 Widget buildShortPost(context, index){
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
 
@@ -135,6 +146,11 @@ Widget buildShortPost(context, index){
 }
 
 
+/*
+  buildLongPost creates the full version of the post with bigger fonts
+  and "longDescription" will be created when the selectedId corresponds
+  to the current post.
+ */
 Widget buildLongPost(context, index){
 
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
@@ -212,6 +228,10 @@ Widget buildLongPost(context, index){
   );
 }
 
+/*
+   _showDeleteDialog asks the user whether they would like to delete the current
+  OfflinePost from the database
+ */
 _showDeleteDialog(context, index){
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
 

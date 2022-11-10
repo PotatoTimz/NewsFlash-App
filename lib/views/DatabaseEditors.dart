@@ -1,20 +1,29 @@
+/*
+  DataBaseEditors contains multiple classes used to modify both the online
+  and offline databases associated to the app.
+  @author Andre Alix
+  @version Group Project Check-In
+  @since 2022-11-11
+ */
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-
 import '../models/PostOffline.dart';
 import '../models/PostOnline.dart';
 import 'HomePage.dart';
 
+// insertOnlineDatabase adds a new post to the firebase database
 Future insertOnlineDatabase(newPost) async{
   await FirebaseFirestore.instance.collection('posts').doc().set(newPost.toMapOnline());
 }
 
+// updateOnlineDatabase updates a post within the firebase database
 Future updateOnlineDatabase(selectedIndex, updatedPost, fireBaseInstance) async{
   QuerySnapshot querySnapshot = await fireBaseInstance.get();
   PostOnline post =  PostOnline.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
   await FirebaseFirestore.instance.collection('posts').doc(post.reference?.id.toString()).set(updatedPost.toMapOnline());
 }
 
+// deleteOnlineDatabase deletes a post within the firebase database
 Future deleteOnlineDatabase(selectedIndex, fireBaseInstance) async{
   QuerySnapshot querySnapshot = await fireBaseInstance.get();
   PostOnline post = PostOnline.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
@@ -22,6 +31,12 @@ Future deleteOnlineDatabase(selectedIndex, fireBaseInstance) async{
   post.reference!.delete();
 }
 
+/*
+  Populates the PostsListBLoC listener with the contents of the
+  sqlite offline database.
+  Also updates the lastInsertedId to the highest found id within the
+  offline database.
+ */
 Future initializeOfflineDataBase(context) async{
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
   List posts = await model.getAllPosts();
@@ -38,6 +53,7 @@ Future initializeOfflineDataBase(context) async{
 
 }
 
+// deleteOfflineDatabase deletes a PostOffline from the sqlite database
 void deleteOfflineDatabase(int selectedIndex, context){
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
 
@@ -46,6 +62,7 @@ void deleteOfflineDatabase(int selectedIndex, context){
 
 }
 
+// readOfflineDatabase prints out the contents of the sqlite database
 Future readOfflineDatabase()  async{
   List posts = await model.getAllPosts();
   print("Post Offline Database:");
@@ -54,6 +71,7 @@ Future readOfflineDatabase()  async{
   }
 }
 
+// addOfflineDatabase adds a PostOffline to the sqlite database
 Future addOfflineDatabase(PostOffline post, context) async{
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
   lastInsertedId = await model.insertPosts(post);

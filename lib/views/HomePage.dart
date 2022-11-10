@@ -1,3 +1,16 @@
+/*
+  HomePage creates the page that contains the different features within the app
+  TabController that populates the homepage with different features depending
+  on the selected tab
+
+  "model" contains an instance of post_model used to edit the sqlite database
+  "lastInsertedId" contains a integer used to determine the last used id for the sqlite database
+
+  @author Andre Alix
+  @version Group Project Check-In
+  @since 2022-11-11
+ */
+
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/HomePageTabs/PictureViewMode/PictureViewerBuilder.dart';
 import 'package:groupproject/views/HomePageTabs/SearchPage/SearchPage.dart';
@@ -10,6 +23,10 @@ import 'HomePageTabs/OnlineViewMode/OnlineHomeScreenBuilder.dart';
 var model = PostModel();
 int lastInsertedId = 0;
 
+/*
+  Creates the HomePage scaffold which contains the main UI elements
+  for the app
+ */
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key, this.title}) : super(key: key);
 
@@ -19,6 +36,20 @@ class HomePageWidget extends StatefulWidget {
   State<HomePageWidget> createState() => _HomePageWidgetState();
 }
 
+/*
+  Creates the DefaultTabController that allows changes the widget
+  displayed in the body depending on the tab that is currently being
+  selected
+  "HomeScreen" tab creates a listview that contains all the posts
+  found within the firebase database
+  "PictureViewer" creates a gridview containing all the pictures
+  found within the firebase database
+  "Polls and Surveys" Work in Progress
+  "Offline Viewer" tab creates a listview that contains all the posts
+  found within the sqlite database
+  "Profile" contains a gridview containing all of the posts that are linked
+   to the current account
+ */
 class _HomePageWidgetState extends State<HomePageWidget> {
   @override
   void initState() {
@@ -59,10 +90,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           decoration: const BoxDecoration(color: Colors.lightBlue),
           child: const TabBar(
             tabs: [
-              Tab(
-                text: "HomeScreen",
-                icon: Icon(Icons.home),
-              ),
+              Tab(text: "HomeScreen", icon: Icon(Icons.home),),
               Tab(text: "PictureViewer", icon: Icon(Icons.photo)),
               Tab(text: "Polls and Surveys", icon: Icon(Icons.poll)),
               Tab(text: "Offline Viewer", icon: Icon(Icons.download)),
@@ -81,6 +109,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
+  /*
+   * goToCreatePostPage navigates onto to create post page and can be
+   * done from any of the tabs within the HomePage navigator.
+   */
   Future<void> goToCreatePostPage(context) async {
     var newPost = await Navigator.pushNamed(context, r'/createPostPage');
     if (newPost == null) {

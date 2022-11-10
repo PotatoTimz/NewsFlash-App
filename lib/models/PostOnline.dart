@@ -1,5 +1,28 @@
+/*
+  Contains Post Online class which is used to store the variables needed to create a post
+  within the app.
+  Also contains classes that are used to edit the contents within a online post
+  @author Andre Alix
+  @version Group Project Check-In
+  @since 2022-11-11
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/*
+  PostOnline class contains the info needed to populate an online post
+  "userName" Contains the username associated to the post
+  "timeString" Contains the time the post was created
+  "longDescription" Contains the full version of the article
+  "shortDescription" Contains a shorter version of the article
+  "imageURL" Contains the online link to the photo
+  "title" Contains the title of the post
+  "comments" Contains the comments associated to a post
+  "numReposts" Contains the amount of times a post has been reposted
+  "numLikes" Contains the amount of times a post has been liked
+  "numDislikes" Contains the amount of times a post has been disliked
+  "DocumentReference" contains the id that corresponds to the firebase database
+ */
 class PostOnline{
   String? userName;
   String? timeString;
@@ -15,8 +38,10 @@ class PostOnline{
 
   DocumentReference? reference;
 
+  //Constructor to create an Online Post
   PostOnline({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription, this.numLikes, this.numDislikes, this.numReposts, this.comments});
 
+  //Converts a PostOnline into a map
   PostOnline.fromMap(var map, {this.reference}){
     this.userName = map['userName'];
     this.timeString = map['timeString'];
@@ -30,6 +55,7 @@ class PostOnline{
     this.numDislikes = map['numDislikes'];
   }
 
+  //Converts a map into a PostOnline
   Map<String, Object?> toMapOnline(){
     return{
       // 'name' : this.name,
@@ -46,14 +72,17 @@ class PostOnline{
     };
   }
 
+  //Adds a comment into the comment list
   void addComment(newComment){
     comments?.add(newComment);
   }
 
+  //Deletes a comment from the comment list
   void deleteComment(commentIndex){
     comments?.removeAt(commentIndex);
   }
 
+  //Edits a comment from the comment list
   void editComment(newComment, commentIndex){
     comments![commentIndex] = newComment;
   }

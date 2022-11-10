@@ -1,11 +1,25 @@
+/*
+  CommentPage creates a page that is used to display the post (on top) and
+  all the comments associated to the given post (the bottom). Also
+  contains ways to edit, delete and create comments for the post
+  "post" Contains the OnlinePost that is being displayed and generates
+  the comment page based of variables contained within the given post
+  @author Andre Alix
+  @version Group Project Check-In
+  @since 2022-11-11
+ */
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/DatabaseEditors.dart';
 import 'package:groupproject/views/HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
-
 import '../models/PostOnline.dart';
 import 'HomePageTabs/OnlineViewMode/OnlineHomeScreenBuilder.dart';
 
+/*
+  CommentPage creates the comment page given a OnlinePost
+  "post" specific post used to generate the contents of the comment page
+ */
 class CommentPage extends StatefulWidget {
 
   CommentPage({Key? key, this.post}) : super(key: key);
@@ -16,6 +30,13 @@ class CommentPage extends StatefulWidget {
   State<CommentPage> createState() => _CommentPageState();
 }
 
+/*
+  _CommentPageState Creates the page that contains both he post itself
+  and the comment section. Each of which are populated using the variables
+  within the given post.
+  When the page is exited the instance of the post is sent back to the HomeScreen
+  and updated over the selected post to update any of the changed variables.
+ */
 class _CommentPageState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
@@ -93,6 +114,10 @@ class _CommentPageState extends State<CommentPage> {
   }
 }
 
+/*
+  goToCreateCommentPage goes to a new page that is used to create a new comment
+  once done the comment is added to the post's comment list
+ */
 Future<void> goToCreateCommentPage(context, post, fireBaseInstance) async{
 
   var newComment = await Navigator.pushNamed(context, r'/createCommentPage');
@@ -105,6 +130,11 @@ Future<void> goToCreateCommentPage(context, post, fireBaseInstance) async{
   }
 }
 
+/*
+  goToEditCommentPage goes to a new page that is used to create a new comment
+  once done the comment is done it replaces the previous comment in
+  the post's comment list
+ */
 Future<void> goToEditCommentPage(context, post, fireBaseInstance, commentIndex) async{
 
   var newComment = await Navigator.pushNamed(context, r'/createCommentPage');
@@ -117,7 +147,10 @@ Future<void> goToEditCommentPage(context, post, fireBaseInstance, commentIndex) 
   }
 }
 
-
+/*
+  buildCommentSection creates a widget contain a comment and
+  a button used to edit or delete a comment
+ */
 Widget buildCommentSection(context, post, index, fireBaseInstance){
 
   return Container(
@@ -138,6 +171,10 @@ Widget buildCommentSection(context, post, index, fireBaseInstance){
   );
 }
 
+/*
+  Creates a dialog asking weather the user would like to edit
+  or delete the given comment
+ */
 _showCommentOptions(context, post, index, fireBaseInstance){
   showDialog(
       context: context,
@@ -165,6 +202,10 @@ _showCommentOptions(context, post, index, fireBaseInstance){
   );
 }
 
+/*
+  If the deleted was chosen for the previous comment than asks
+  a second time if the user would like to delete the comment
+ */
 _showDeleteCommentDialog(context, post, index, fireBaseInstance){
   showDialog(context: context,
       barrierDismissible: false,                              //doesnt allow user to click of alert pop up

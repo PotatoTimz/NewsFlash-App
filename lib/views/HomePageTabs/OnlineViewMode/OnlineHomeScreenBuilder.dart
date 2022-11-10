@@ -1,6 +1,14 @@
+/*
+ OnlineHomeScreen creates a list of post based from the data found within the firebase
+ database.
+ OnlineHomeScreen will be used to view the post and interact with the post through
+ the things likes likes, dislikes, reposts, etc.
+ @author Andre Alix
+ @version Group Project Check-In
+ @since 2022-11-11
+*/
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../../../models/PostOffline.dart';
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
@@ -14,6 +22,17 @@ class OnlineHomeScreen extends StatefulWidget {
   State<OnlineHomeScreen> createState() => _OnlineHomeScreenState();
 }
 
+/*
+ OnlineHomeScreen creates a listview using snapshot instances found within the firebase
+ database.
+ The data in the firebase database is turned into an OnlinePost which is sent to
+ separate widget creates buildlongpost and buildshort post.
+ The widget has two viewing modes which will change depending on which index is currently
+ being selected.
+ Clicking a post will select the post, expanding it
+ Double clicking an object will bring up the comment page for the post
+ Holding down will unselect the post turning it back to its default view
+*/
 class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
 
   final fireBaseInstance = FirebaseFirestore.instance.collection('posts');
@@ -74,14 +93,22 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
   }
 }
 
+/*
+* Navigates into a new page which returns a new OnlinePost which is than used
+* to replace data stored within the firebase database
+*/
 Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async{
 
   var newPost = await Navigator.pushNamed(context, r'/createPostPage');
   updateOnlineDatabase(index, newPost, fireBaseInstance);
 }
 
-
-
+/*
+ buildOnlineLongPost is given a post which is used to display the information
+ stored within the post. This will only be created when the selectedIndex
+ is equal to the index of the post.
+ Displays information with a larger font and displays the longDiscription
+*/
 Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
 
 
@@ -205,6 +232,12 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
   );
 }
 
+/*
+ buildOnlineShortPost is given a post which is used to display the information
+ stored within the post. This will only be the default widget used to display
+ the post and will happened if the selected index is not equal to the post's index
+ Displays information with a smaller font and displays the shortDescription
+*/
 Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
 
   return Column(
@@ -284,6 +317,14 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
   );
 }
 
+/*
+ _showPostOptions shows a dialog asking what the user would like to
+ do with the post. They may delete, edit or save the post.
+ Deleting a post will remove it from the firebase database
+ Editing will prompt you to a new page where you can make anew post
+ this post will replace the previous post
+ Save post will add the post into the sqlite database
+*/
 _showPostOptions(context, index, fireBaseInstance, post){
   showDialog(
       context: context,
@@ -319,9 +360,10 @@ _showPostOptions(context, index, fireBaseInstance, post){
   );
 }
 
+//Asks the user if they would like to delete a the post from the online database
 _showDeleteDialog(context, fireBaseInstance){
   showDialog(context: context,
-      barrierDismissible: false,                              //doesnt allow user to click of alert pop up
+      barrierDismissible: false,                              //doesn't allow user to click of alert pop up
       builder: (context){
         return AlertDialog(
           title: const Text("Delete Post"),
