@@ -67,6 +67,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           actions: [
             IconButton(
                 onPressed: () {
+                  goToCreatePostPage(context);
+                },
+              tooltip: "Submit your article!",
+                icon: const Icon(Icons.add),
+            ),
+            IconButton(
+                onPressed: () {
                   showSearch(context: context, delegate: SearchPage());
                 },
                 icon: const Icon(Icons.search)),
@@ -87,7 +94,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           ],
         ),
         bottomNavigationBar: Container(
-          decoration: const BoxDecoration(color: Colors.lightBlue),
+          decoration: const BoxDecoration(color: Colors.teal),
           child: const TabBar(
             tabs: [
               Tab(text: "HomeScreen", icon: Icon(Icons.home),),
@@ -97,13 +104,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Tab(text: "Profile", icon: Icon(Icons.account_box)),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            goToCreatePostPage(context);
-          },
-          tooltip: 'Make Post',
-          child: const Icon(Icons.add),
         ),
       ),
     );
