@@ -1,4 +1,3 @@
-//temporary
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/CommentPage.dart';
@@ -6,6 +5,7 @@ import 'package:groupproject/views/HomePage.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/CreateCommentPage.dart';
 import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
+import 'package:groupproject/notifications.dart';
 
 import 'models/PostOffline.dart';
 
@@ -65,10 +65,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
+  final notifications = Notifications();
 
   @override
   Widget build(BuildContext context) {
     PostsListBLoC postsListBLoC = context.watch<PostsListBLoC>();
+
+    notifications.init();
 
     return Scaffold(
       body:
@@ -77,7 +80,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> goToHomePage() async {
+    var snackbar = SnackBar(
+        duration: Duration(seconds: 1), content: Text("Logging In..."));
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    await Future.delayed(Duration(seconds: 1));
     var loginStatus = await Navigator.pushNamed(context, r'/homePage');
+  }
+
+  void notificationNow() async {
+    notifications.sendNotification("title", "body", "payload");
   }
 
   Widget buildLogin() {
@@ -139,7 +150,10 @@ class _LoginPageState extends State<LoginPage> {
                         minimumSize: const Size.fromHeight(50),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25))),
-                    onPressed: goToHomePage,
+                    onPressed: () {
+                      notificationNow();
+                      goToHomePage();
+                    },
                     child: const Text(
                       "Log In",
                       style: TextStyle(fontSize: 20),
