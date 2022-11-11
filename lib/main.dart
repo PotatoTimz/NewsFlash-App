@@ -80,9 +80,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> goToHomePage() async {
-    var snackbar = SnackBar(
+    var snackBar = const SnackBar(
         duration: Duration(seconds: 1), content: Text("Logging In..."));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
     await Future.delayed(Duration(seconds: 1));
     var loginStatus = await Navigator.pushNamed(context, r'/homePage');
   }

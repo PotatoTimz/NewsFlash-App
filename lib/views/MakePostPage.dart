@@ -105,6 +105,9 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                         numDislikes: 0,
                         comments: [],
                       );
+                      var snackBar = const SnackBar(
+                          duration: Duration(seconds: 1), content: Text("Article Posted!"));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       Navigator.of(context).pop(newPost);
                     },
                     child: Text("Create Post")
