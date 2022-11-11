@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:groupproject/models/PostOnline.dart';
 import 'package:provider/provider.dart';
-
+/*Sources:
+Stopped overflow error: https://www.geeksforgeeks.org/flutter-pixels-overflow-error-while-launching-keyboard/#:~:text=Solution%20%3A,the%20entire%20UI%20is%20centered.
+Date format: https://stackoverflow.com/questions/51579546/how-to-format-datetime-in-flutter
+*/
 //TODO: Username should eventually be automatically filled in via the username that the user is currently logged in with.
 class CreatePostWidget extends StatefulWidget {
   const CreatePostWidget({Key? key, this.title}) : super(key: key);
@@ -29,7 +32,8 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
       appBar: AppBar(title:Text(widget.title!)),
       body: Form(
         key: formKey,
-        child: Padding(
+        child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.all(18.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,17 +86,11 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                   },
                 ),
                 //TODO: Set time to datetime.now() so it's automatically showed
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Time"
-                  ),
-                  onChanged: (value){
-                    timeString = value;
-                  },
-                ),
 
                 ElevatedButton(
                     onPressed:(){
+                      String? postTime = formatTime();
+                      timeString = postTime;
                       PostOnline newPost = PostOnline(
                         userName: userName,
                         timeString: timeString,
@@ -114,8 +112,42 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                 ),
               ],
             ),
+          ),
         ),
       ),
     );
+  }
+
+  String? formatTime() {
+    DateTime now = DateTime.now();
+    String dayHalf = "";
+    int adjustedHour = now.hour;
+    String? adjustedMinute = now.minute.toString();
+    String? adjustedSecond = now.second.toString();
+    if (adjustedHour >= 12)
+      {
+        dayHalf = "pm";
+        if (adjustedHour != 12)
+          {
+            adjustedHour -= 12;
+          }
+      }
+    else
+      {
+        dayHalf = "am";
+        if (adjustedHour == 0)
+          {
+            adjustedHour += 12;
+          }
+      }
+    if (now.minute < 10)
+      {
+        adjustedMinute = "0$adjustedMinute";
+      }
+    if (now.second < 10)
+      {
+        adjustedSecond = "0$adjustedSecond";
+      }
+    return "${now.day}-${now.month}-${now.year} at $adjustedHour:$adjustedMinute:$adjustedSecond$dayHalf";
   }
 }
