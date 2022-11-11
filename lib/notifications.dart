@@ -56,6 +56,21 @@ class Notifications {
         payload: payload);
   }
 
+  sendNotificationLater(
+      String title, String body, String payload, TZDateTime when) {
+    return _flutterLocalNotificationsPlugin.zonedSchedule(
+        _notificationID++, title, body, when, _platformChannelInfo!,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true,
+        payload: payload);
+  }
+
+  sendNotificationPeriodic(String title, String body, String payload) {
+    return _flutterLocalNotificationsPlugin.periodicallyShow(
+        0, title, body, RepeatInterval.everyMinute, _platformChannelInfo!);
+  }
+
   _requestIOSPermission() {
     _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<

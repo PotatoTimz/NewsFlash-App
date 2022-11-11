@@ -88,7 +88,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void notificationNow() async {
-    notifications.sendNotification("title", "body", "payload");
+    notifications.sendNotification("t", "body", "payload");
+  }
+
+  void notificationPeriodic() async {
+    notifications.sendNotificationPeriodic("Time to BREEL",
+        "send a post and see what your friends are up to!", "payload");
   }
 
   Widget buildLogin() {
@@ -151,7 +156,8 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25))),
                     onPressed: () {
-                      notificationNow();
+                      // notificationNow();
+                      notificationPeriodic();
                       goToHomePage();
                     },
                     child: const Text(
