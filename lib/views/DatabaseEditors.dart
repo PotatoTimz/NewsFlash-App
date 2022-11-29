@@ -6,10 +6,28 @@
   @since 2022-11-11
  */
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:groupproject/models/Polls.dart';
 import 'package:provider/provider.dart';
 import '../models/PostOffline.dart';
 import '../models/PostOnline.dart';
 import 'HomePage.dart';
+
+Future updatePollDatabase(selectedIndex, updatedPost, fireBaseInstance) async{
+  QuerySnapshot querySnapshot = await fireBaseInstance.get();
+  PostOnline post =  PostOnline.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
+  await FirebaseFirestore.instance.collection('polls').doc(post.reference?.id.toString()).set(updatedPost.toMapOnline());
+}
+
+Future insertPollDatabase(newPolls) async{
+  await FirebaseFirestore.instance.collection('polls').doc().set(newPolls.toMapOnline());
+}
+
+Future deletePollDatabase(selectedIndex, fireBaseInstance) async{
+  QuerySnapshot querySnapshot = await fireBaseInstance.get();
+  Polls poll = Polls.fromMap(querySnapshot.docs[selectedIndex].data(), reference: querySnapshot.docs[selectedIndex].reference);
+
+  poll.reference!.delete();
+}
 
 // insertOnlineDatabase adds a new post to the firebase database
 Future insertOnlineDatabase(newPost) async{
