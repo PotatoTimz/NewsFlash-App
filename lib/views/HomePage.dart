@@ -19,6 +19,7 @@ import 'DatabaseEditors.dart';
 import 'HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import 'HomePageTabs/OfflineDatabase/post_model.dart';
 import 'HomePageTabs/OnlineViewMode/OnlineHomeScreenBuilder.dart';
+import 'HomePageTabs/Polls/PollsPageBuilder.dart';
 
 var model = PostModel();
 int lastInsertedId = 0;
@@ -66,11 +67,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           title: Text(widget.title!),
           actions: [
             IconButton(
-                onPressed: () {
-                  goToCreatePostPage(context);
-                },
+              onPressed: () {
+                showAddPostDialog(context);
+              },
               tooltip: "Submit your article!",
-                icon: const Icon(Icons.add),
+              icon: const Icon(Icons.add),
             ),
             IconButton(
                 onPressed: () {
@@ -84,28 +85,58 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 icon: Icon(Icons.data_object)),
           ],
         ),
-        body: TabBarView(
+        body:
+        //SingleChildScrollView (
+        //   scrollDirection: Axis.horizontal,
+        //  child:
+        TabBarView(
           children: [
             OnlineHomeScreen(),
             PictureViewerBuilder(),
-            Text("work in progress"),
+            PollsPageBuilder(),
             OfflineHomeScreen(),
             ProfilePageBuilder(),
           ],
         ),
+        //),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(color: Colors.teal),
           child: const TabBar(
             tabs: [
               Tab(text: "HomeScreen", icon: Icon(Icons.home),),
               Tab(text: "PictureViewer", icon: Icon(Icons.photo)),
-              Tab(text: "Polls and Surveys", icon: Icon(Icons.poll)),
+              Tab(text: "Polls", icon: Icon(Icons.poll)),
               Tab(text: "Offline Viewer", icon: Icon(Icons.download)),
               Tab(text: "Profile", icon: Icon(Icons.account_box)),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  showAddPostDialog(context){
+    showDialog(
+        context: context,
+        builder: (context){
+          return SimpleDialog(
+            title: const Text("What type of post would you like to make"),
+            children: [
+              SimpleDialogOption(
+                  onPressed: (){
+                    goToCreatePostPage(context);
+                  },
+                  child: const Text("Written post")
+              ),
+              SimpleDialogOption(
+                  onPressed: (){
+                    goToCreatePollsPage(context);
+                  },
+                  child: const Text("Polls post")
+              ),
+            ],
+          );
+        }
     );
   }
 
@@ -121,4 +152,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       insertOnlineDatabase(newPost);
     }
   }
+
+  Future<void> goToCreatePollsPage(context) async{
+    var newPoll = await Navigator.pushNamed(context, r'/createNewPoll');
+    if (newPoll == null){
+      print("Nothing was Inputted");
+    }
+    else{
+      insertPollDatabase(newPoll);
+    }
+  }
 }
+

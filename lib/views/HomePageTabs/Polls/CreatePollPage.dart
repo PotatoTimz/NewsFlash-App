@@ -16,8 +16,10 @@ class _CreatePollPageState extends State<CreatePollPage> {
   String? title = "";
   String? timeString = "";
   String? description = "";
+  String? userName = "";
   List<dynamic> pollOptions = ["", "", "", ""];
   List<dynamic> pollResults = [0, 0, 0, 0];
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,15 @@ class _CreatePollPageState extends State<CreatePollPage> {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: "Author",
+                    hintText: "Enter your username",
+                  ),
+                  onChanged: (value) {
+                    userName = value;
+                  },
+                ),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: "Headline",
@@ -68,7 +79,7 @@ class _CreatePollPageState extends State<CreatePollPage> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: "Choice 1",
+                    labelText: "Choice 3",
                     hintText: "Enter an answer to your poll",
                   ),
                   onChanged: (value) {
@@ -95,6 +106,7 @@ class _CreatePollPageState extends State<CreatePollPage> {
                       }
                       else {
                         Polls newPoll = Polls(
+                            userName: userName,
                             title: title,
                             timeString: timeString,
                             description: description,

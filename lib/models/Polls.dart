@@ -8,6 +8,7 @@ class Polls{
   List<dynamic>? pollOptions;
   List<dynamic>? pollResults;
 
+
   DocumentReference? reference;
 
   Polls({this.title, this.timeString, this.description, this.pollOptions, this.pollResults, this.userName});

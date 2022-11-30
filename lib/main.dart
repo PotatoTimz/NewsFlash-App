@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:groupproject/views/CommentPage.dart';
 import 'package:groupproject/views/HomePage.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/CreateCommentPage.dart';
+import 'package:groupproject/views/HomePageTabs/Polls/CreatePollPage.dart';
+import 'package:groupproject/views/HomePageTabs/Polls/ViewPollStatistics.dart';
 import 'package:groupproject/views/MakePostPage.dart';
 import "package:provider/provider.dart";
 import 'package:groupproject/notifications.dart';
@@ -40,11 +42,13 @@ class MyApp extends StatelessWidget {
               home: const LoginPage(title: 'Flutter Demo Home Page'),
               routes: {
                 '/homePage': (context) =>
-                    const HomePageWidget(title: "HomePage"),
+                const HomePageWidget(title: "HomePage"),
                 '/createPostPage': (context) =>
-                    const CreatePostWidget(title: "Create a Post"),
+                const CreatePostWidget(title: "Create a Post"),
                 '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
+                '/createNewPoll' : (context) => const CreatePollPage(),
+                '/viewPollStatisics' : (context) => const ViewPollStatistics()
               },
             );
           } else {
@@ -53,6 +57,7 @@ class MyApp extends StatelessWidget {
         });
   }
 }
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -75,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body:
-          buildLogin(), // This trailing comma makes auto-formatting nicer for build methods.
+      buildLogin(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -129,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.teal, width: 5.0),
+                          BorderSide(color: Colors.teal, width: 5.0),
                           borderRadius: BorderRadius.circular(50.0)),
                       label: Text("Username"),
                       hintText: "Username"),

@@ -26,83 +26,87 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
             return CircularProgressIndicator();
           } else {
             print("Data Loaded!");
-            return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return ListView(
+              children: [
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                          flex: 1,
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.blue,
-                            child: Text("AA"),
-                          )),
-                      Flexible(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Text("${mainaccount.numposts} Posts" ),
-                              Text(" ${mainaccount.followers} Followers "),
-                              Text(" ${mainaccount.following} Following"),
-                            ],
-                          )),
-                    ],
-                  ),
-                  Text("${mainaccount.userName}"),
-                  ElevatedButton.icon(
-                    onPressed: () {}, //need to add page
-                    icon: Icon(
-                      // <-- Icon
-                      Icons.edit,
-                      size: 24.0,
-                    ),
-                    label: Text('edit profile'), // <-- Text
-                  ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                              flex: 1,
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.blue,
+                                child: Text("AA"),
+                              )),
+                          Flexible(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  Text("${mainaccount.numposts} Posts" ),
+                                  Text(" ${mainaccount.followers} Followers "),
+                                  Text(" ${mainaccount.following} Following"),
+                                ],
+                              )),
+                        ],
+                      ),
+                      Text("${mainaccount.userName}"),
+                      ElevatedButton.icon(
+                        onPressed: () {}, //need to add page
+                        icon: Icon(
+                          // <-- Icon
+                          Icons.edit,
+                          size: 24.0,
+                        ),
+                        label: Text('edit profile'), // <-- Text
+                      ),
 
-                  //needs to be changed for only my posts
+                      //needs to be changed for only my posts
 
-                  GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        PostOnline post = PostOnline.fromMap(
-                            snapshot.data.docs[index].data(),
-                            reference: snapshot.data.docs[index].reference);
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedIndex = index;
-                            });
-                          },
-                          onDoubleTap: () async {
-                            setState(() {
-                              selectedIndex = index;
-                            });
-                            var updatedPost = await Navigator.pushNamed(
-                                context, '/commentPage', arguments: {
-                              'fireBaseInstance': fireBaseInstance
-                            });
-                            updateOnlineDatabase(index, updatedPost, fireBaseInstance);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: selectedIndex != index
-                                    ? Colors.white
-                                    : Colors.black12),
-                            padding: EdgeInsets.all(10),
-                            child: Image.network(
-                              "${post.imageURL}",
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        );
-                      })
-                ]);
+                      GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            PostOnline post = PostOnline.fromMap(
+                                snapshot.data.docs[index].data(),
+                                reference: snapshot.data.docs[index].reference);
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              onDoubleTap: () async {
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                                var updatedPost = await Navigator.pushNamed(
+                                    context, '/commentPage', arguments: {
+                                  'fireBaseInstance': fireBaseInstance
+                                });
+                                updateOnlineDatabase(index, updatedPost, fireBaseInstance);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: selectedIndex != index
+                                        ? Colors.white
+                                        : Colors.black12),
+                                padding: EdgeInsets.all(10),
+                                child: Image.network(
+                                  "${post.imageURL}",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            );
+                          })
+                    ]),
+              ],
+            );
           }
         });
   }

@@ -22,148 +22,63 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: fireBaseInstance.snapshots(),
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        if (!snapshot.hasData) {
-          print("Data is missing from buildGradeList");
-          return CircularProgressIndicator();
-        }
-        else{
-          print("Poll Data Loaded!");
-          for (int i = 0; i <snapshot.data.docs.length; i ++){
-            voted.add(false);
+        stream: fireBaseInstance.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot){
+          if (!snapshot.hasData) {
+            print("Data is missing from buildGradeList");
+            return CircularProgressIndicator();
           }
+          else{
+            print("Poll Data Loaded!");
+            for (int i = 0; i <snapshot.data.docs.length; i ++){
+              voted.add(false);
+            }
 
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (context, index){
-              Polls poll = Polls.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
-              return GestureDetector(
-                onTap: (){
+            return ListView(
+              children: [
 
+                ElevatedButton(
+                    onPressed: (){
+                      goToStatisticsPage(context);
                 },
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: Colors.grey),),
+                    child: Text("View Data Table Mode")
+                ),
 
-                    child: Container(
-                      decoration: BoxDecoration(color: pollSelectedIndex != index ? Colors.white : Colors.black12 ),
-                      padding: const EdgeInsets.all(15),
-                      child: voted[index] == false ? buildPollPost(poll, index, context) : buildPollResults2(poll, index, context),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index){
+                    Polls poll = Polls.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
+                    return Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(border: Border.all(color: Colors.grey),),
 
-                    ),
+                          child: Container(
+                            decoration: BoxDecoration(color: pollSelectedIndex != index ? Colors.white : Colors.black12 ),
+                            padding: const EdgeInsets.all(15),
+                            child: voted[index] == false ? buildPollPost(poll, index, context) : buildPollResults2(poll, index, context),
 
-                  )
-              );
-            },
-          );
+                          ),
 
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ],
+            );
+
+          }
         }
-      }
     );
+  }
+
+  Future<void> goToStatisticsPage(context) async{
+    await Navigator.pushNamed(context, r'/viewPollStatisics');
   }
 
   Widget buildPollPost(poll, index, context){
-    return Column(
-        children: [
-
-          Row(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const CircleAvatar(
-                    radius: 15,
-                    child: Text("AA", textScaleFactor: 1),
-                  ),
-                  const SizedBox(width: 20),
-                  Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                          "${poll.userName}",
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                      IconButton(
-                        onPressed: () {
-                          deleteDialog(context, index, fireBaseInstance);
-                        },
-                        icon: const Icon(Icons.more_vert),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-
-          Text(
-              "${poll?.title}",
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 30
-              ),
-              textAlign: TextAlign.center
-          ),
-          Text("${poll?.timeString}",
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 15),
-              textAlign: TextAlign.center
-          ),
-          const SizedBox(height: 10),
-
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              "${poll?.description}",
-              style: const TextStyle(fontSize: 15),
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: poll.pollOptions?.length,
-            itemBuilder: (context, pollOptionsIndex){
-              return GestureDetector(
-                onTap: (){
-                  setState(() {
-                    poll.pollResults?[pollOptionsIndex]++;
-                    updatePollDatabase(index, poll, fireBaseInstance);
-                    voted[index] = true;
-                  });
-                },
-                child:
-                Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    poll.pollOptions![pollOptionsIndex],
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15
-                    ),
-                  ),
-                ),
-              );
-            },
-          )
-
-        ],
-    );
-  }
-
-  Widget buildPollResults2(poll, index, context){
-
-    Map<String, double> dataMap = {};
-
-    for (int i = 0; i < poll.pollOptions.length; i++){
-      dataMap["${poll.pollOptions[i]}"] = poll.pollResults[i].toDouble();
-    }
-
     return Column(
       children: [
 
@@ -219,13 +134,114 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
             style: const TextStyle(fontSize: 15),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 10),
 
-        PieChart(
-          dataMap : dataMap,
-          chartType: ChartType.ring,
-        ),
-      ]
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: poll.pollOptions?.length,
+          itemBuilder: (context, pollOptionsIndex){
+            return GestureDetector(
+              onTap: (){
+                setState(() {
+                  poll.pollResults?[pollOptionsIndex]++;
+                  updatePollDatabase(index, poll, fireBaseInstance);
+                  voted[index] = true;
+                });
+              },
+              child:
+              Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  poll.pollOptions![pollOptionsIndex],
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15
+                  ),
+                ),
+              ),
+            );
+          },
+        )
+
+      ],
+    );
+  }
+
+  Widget buildPollResults2(poll, index, context){
+
+    Map<String, double> dataMap = {};
+
+    for (int i = 0; i < poll.pollOptions.length; i++){
+      dataMap["${poll.pollOptions[i]}"] = poll.pollResults[i].toDouble();
+    }
+
+    return Column(
+        children: [
+
+          Row(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const CircleAvatar(
+                    radius: 15,
+                    child: Text("AA", textScaleFactor: 1),
+                  ),
+                  const SizedBox(width: 20),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                          "${poll.userName}",
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                      IconButton(
+                        onPressed: () {
+                          deleteDialog(context, index, fireBaseInstance);
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
+
+          Text(
+              "${poll?.title}",
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 30
+              ),
+              textAlign: TextAlign.center
+          ),
+          Text("${poll?.timeString}",
+              style: const TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 15),
+              textAlign: TextAlign.center
+          ),
+          const SizedBox(height: 10),
+
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "${poll?.description}",
+              style: const TextStyle(fontSize: 15),
+            ),
+          ),
+          const SizedBox(height: 30),
+
+          PieChart(
+            dataMap : dataMap,
+            chartType: ChartType.ring,
+          ),
+        ]
     );
   }
 
