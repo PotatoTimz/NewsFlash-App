@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
                 '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
                 '/createNewPoll' : (context) => const CreatePollPage(),
-                '/viewPollStatisics' : (context) => const ViewPollStatistics()
               },
             );
           } else {

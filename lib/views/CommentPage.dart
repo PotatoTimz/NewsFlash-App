@@ -65,6 +65,7 @@ class _CommentPageState extends State<CommentPage> {
               print("Data Loaded!");
               PostOnline post = PostOnline.fromMap(snapshot.data.docs[selectedIndex].data(), reference: snapshot.data.docs[selectedIndex].reference);
               return ListView(
+
                 children: [
 
                   Container(

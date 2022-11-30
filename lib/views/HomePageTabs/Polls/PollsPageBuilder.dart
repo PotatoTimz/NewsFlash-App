@@ -5,6 +5,8 @@ import 'package:groupproject/views/DatabaseEditors.dart';
 import 'package:charts_flutter_new/flutter.dart' as charts;
 import 'package:pie_chart/pie_chart.dart';
 
+import 'ViewPollStatistics.dart';
+
 List voted = [];
 
 class PollsPageBuilder extends StatefulWidget {
@@ -39,13 +41,16 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
 
                 ElevatedButton(
                     onPressed: (){
-                      goToStatisticsPage(context);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ViewPollStatistics(pollData: snapshot.data.docs,))
+                      );
                 },
                     child: Text("View Data Table Mode")
                 ),
 
                 ListView.builder(
                   shrinkWrap: true,
+                  physics: const ScrollPhysics(),
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index){
                     Polls poll = Polls.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
@@ -72,10 +77,6 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
           }
         }
     );
-  }
-
-  Future<void> goToStatisticsPage(context) async{
-    await Navigator.pushNamed(context, r'/viewPollStatisics');
   }
 
   Widget buildPollPost(poll, index, context){
@@ -138,6 +139,7 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
 
         ListView.builder(
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           itemCount: poll.pollOptions?.length,
           itemBuilder: (context, pollOptionsIndex){
             return GestureDetector(
