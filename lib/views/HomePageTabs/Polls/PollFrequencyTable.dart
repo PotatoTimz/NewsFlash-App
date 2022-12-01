@@ -23,7 +23,6 @@ class _PollFrequencyTableState extends State<PollFrequencyTable> {
         tempPollResults[j] = widget.pollsList![i].pollResults![j];
       }
       widget.pollsList![i].pollResults = tempPollResults;
-      print(widget.pollsList![i].pollResults);
     }
   }
 
@@ -73,7 +72,7 @@ class _PollFrequencyTableState extends State<PollFrequencyTable> {
                       data: widget.pollsList!,
                       domainFn: (poll, _) => poll.title,
                       measureFn: (poll, _) => poll.pollResults![3],
-                      colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
+                      colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
                     ),
 
                 ],

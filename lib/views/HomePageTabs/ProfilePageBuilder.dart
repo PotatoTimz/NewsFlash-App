@@ -50,6 +50,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                   Text(" ${mainaccount.following} Following"),
                                 ],
                               )),
+                          
                         ],
                       ),
                       Text("${mainaccount.userName}"),
@@ -67,6 +68,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
 
                       GridView.builder(
                           shrinkWrap: true,
+                          physics: const ScrollPhysics(),
                           gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2),
