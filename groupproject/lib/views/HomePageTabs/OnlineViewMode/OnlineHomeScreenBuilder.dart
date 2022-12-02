@@ -10,6 +10,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:groupproject/constants.dart';
+import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MapViewer.dart';
 import '../../../models/PostOffline.dart';
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
@@ -241,7 +243,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
             TextSpan(text: "${post.location}",
             style: TextStyle(fontSize: 15, color: Colors.blue, decoration: TextDecoration.underline),
             recognizer: TapGestureRecognizer()..onTap = () {
-              print("made it here");
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MapViewer(address: post.location,)));
             }),  
           ])),
     ],

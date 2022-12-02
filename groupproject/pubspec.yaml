@@ -46,6 +46,7 @@ dependencies:
   latlong2:
   geocoding:
   geolocator:
+  flutter_map: ^1.1.1
 
 dev_dependencies:
   flutter_test:
