@@ -12,9 +12,10 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:groupproject/models/Account.dart';
 import 'package:groupproject/views/HomePageTabs/PictureViewMode/PictureViewerBuilder.dart';
 import 'package:groupproject/views/HomePageTabs/SearchPage/SearchPage.dart';
-import 'package:groupproject/views/HomePageTabs/ProfilePageBuilder.dart';
+import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
 import 'DatabaseEditors.dart';
 import 'HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import 'HomePageTabs/OfflineDatabase/post_model.dart';
@@ -60,6 +61,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    final routeData = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final Account loggedInAccount = Account(userName: routeData['userName'], password: routeData['password'], email: "", numposts: 0, followers: 0, following: 0);
+    if (loggedInAccount.userName == ""){
+      loggedInAccount.userName = "Anonymous";
+    }
+
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -95,7 +103,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             PictureViewerBuilder(),
             PollsPageBuilder(),
             OfflineHomeScreen(),
-            ProfilePageBuilder(),
+            ProfilePageBuilder(loggedInUser: loggedInAccount),
           ],
         ),
         //),

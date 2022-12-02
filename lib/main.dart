@@ -5,7 +5,7 @@ import 'package:groupproject/views/HomePage.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/CreateCommentPage.dart';
 import 'package:groupproject/views/HomePageTabs/Polls/CreatePollPage.dart';
 import 'package:groupproject/views/HomePageTabs/Polls/ViewPollStatistics.dart';
-import 'package:groupproject/views/MakePostPage.dart';
+import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MakePostPage.dart';
 import "package:provider/provider.dart";
 import 'package:groupproject/notifications.dart';
 
@@ -83,12 +83,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> goToHomePage() async {
+  Future<void> goToHomePage(userName, password) async {
     var snackBar = const SnackBar(
         duration: Duration(seconds: 1), content: Text("Logging In..."));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     await Future.delayed(Duration(seconds: 1));
-    var loginStatus = await Navigator.pushNamed(context, r'/homePage');
+    var loginStatus = await Navigator.pushNamed(context, r'/homePage',
+                                                arguments: {'userName': userName, 'password': password});
   }
 
   void notificationNow() async {
@@ -101,6 +102,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLogin() {
+
+    String? userName = "";
+    String? password = "";
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -137,6 +142,9 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(50.0)),
                       label: Text("Username"),
                       hintText: "Username"),
+                  onChanged: (value){
+                    userName = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -149,6 +157,9 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(50)),
                       label: Text("Password"),
                       hintText: "Password "),
+                  onChanged: (value){
+                    password = value;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -162,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       // notificationNow();
                       notificationPeriodic();
-                      goToHomePage();
+                      goToHomePage(userName, password);
                     },
                     child: const Text(
                       "Log In",
