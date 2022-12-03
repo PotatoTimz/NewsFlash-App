@@ -1,22 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../../../models/Account.dart';
+import 'package:http/http.dart' as http;
 
 class SearchPage extends SearchDelegate {
-  // Filler account list
-  List<Account> Accounts = [
-    Account(userName: "User1", password: "abc123", email: "User1@email.com"),
-    Account(userName: "Name2", password: "123abc", email: "User1@email.com"),
-    Account(userName: "Person3", password: "qwerty45", email: "User1@email.com"),
-  ];
+  SearchPage({@required this.loggedInUser});
+  final loggedInUser;
 
-  List<String> searchTerms = [];
+  Set<String> Accounts = {};
+  Set<String> searchTerms = {};
 
-  @override
-  void getsearchTerms() {
+  Future<Set<String>> getsearchTerms() async {
     searchTerms.clear();
-    for (var account in Accounts) {
-      searchTerms.add(account.userName.toString());
+
+    var response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
+    if (response.statusCode == 200) {
+      Accounts = {};
+      List items = jsonDecode(response.body);
+      for (var item in items) {
+        Accounts.add(item['username']);
+      }
     }
+
+    for (var account in Accounts) {
+      if (!(loggedInUser.userName.toLowerCase == account)) {
+        searchTerms.add(account);
+      }
+    }
+
+    return searchTerms;
   }
 
   @override
@@ -43,41 +56,52 @@ class SearchPage extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var users in searchTerms) {
-      if (users.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(users);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
+    return FutureBuilder(
+      future: getsearchTerms(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                var result = snapshot.data!.elementAt(index);
+                return ListTile(
+                  title: Text(result),
+                );
+              },
+            );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
         );
-      },
-    );
+      });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    getsearchTerms();
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
+    return FutureBuilder(
+      future: getsearchTerms(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          List<String> matchQuery = [];
+          for (var user in snapshot.data!) {
+            if (user.toLowerCase().contains(query.toLowerCase())) {
+              matchQuery.add(user);
+            }
+          }
+          return ListView.builder(
+            itemCount: matchQuery.length,
+            itemBuilder: (context, index) {
+              var result = matchQuery[index];
+              return ListTile(
+                title: Text(result),
+              );
+            },
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
         );
-      },
-    );
+      });
   }
 
 }
