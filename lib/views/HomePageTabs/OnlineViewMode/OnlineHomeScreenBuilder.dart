@@ -8,15 +8,21 @@
  @since 2022-11-11
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:groupproject/constants.dart';
+import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MapViewer.dart';
 import '../../../models/PostOffline.dart';
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 import '../../HomePage.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class OnlineHomeScreen extends StatefulWidget {
-   OnlineHomeScreen({Key? key}) : super(key: key);
+  OnlineHomeScreen({Key? key}) : super(key: key);
 
   @override
   State<OnlineHomeScreen> createState() => _OnlineHomeScreenState();
@@ -40,55 +46,55 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: fireBaseInstance.snapshots(),
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        if(!snapshot.hasData){
-          print("Data is missing from buildGradeList");
-          return CircularProgressIndicator();
-        }
-        else{
-          print("Data Loaded!");
-          return ListView.builder(
-              itemCount: snapshot.data.docs.length,
-              itemBuilder: (context, index){
-                PostOnline post = PostOnline.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                        // print("selected index $selectedIndex");
-                      });
-                    },
-                    onLongPress: (){
-                      setState(() {
-                        selectedIndex = 1^1000;
-                      });
-                    },
-                    onDoubleTap: ()async{
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                      var updatedPost = await Navigator.pushNamed(
-                        context, '/commentPage',
-                        arguments: {'fireBaseInstance': fireBaseInstance}
-                      );
-                    },
+        stream: fireBaseInstance.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot){
+          if(!snapshot.hasData){
+            print("Data is missing from buildGradeList");
+            return CircularProgressIndicator();
+          }
+          else{
+            print("Data Loaded!");
+            return ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index){
+                  PostOnline post = PostOnline.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
+                  return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = index;
+                              // print("selected index $selectedIndex");
+                            });
+                          },
+                          onLongPress: (){
+                            setState(() {
+                              selectedIndex = 1^1000;
+                            });
+                          },
+                          onDoubleTap: ()async{
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                            var updatedPost = await Navigator.pushNamed(
+                                context, '/commentPage',
+                                arguments: {'fireBaseInstance': fireBaseInstance}
+                            );
+                          },
 
-                      child: Container(
-                        decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
-                        padding: const EdgeInsets.all(15),
-                        child: selectedIndex!= index ? buildOnlineShortPost(post, context, index, fireBaseInstance) : buildOnlineLongPost(post, context, index, fireBaseInstance),
+                          child: Container(
+                            decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
+                            padding: const EdgeInsets.all(15),
+                            child: selectedIndex!= index ? buildOnlineShortPost(post, context, index, fireBaseInstance) : buildOnlineLongPost(post, context, index, fireBaseInstance),
+                          )
                       )
-                  )
-                );
-              }
-          );
+                  );
+                }
+            );
+          }
         }
-      }
     );
   }
 }
@@ -228,6 +234,18 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           Text("  ${post.numDislikes}"),
         ],
       ),
+      // user's post location
+      RichText(
+          text: TextSpan(
+              text: "Posted from: ",
+              style: TextStyle(fontSize: 15, color: Colors.black),
+              children: <TextSpan>[
+                TextSpan(text: "${post.location}",
+                    style: TextStyle(fontSize: 15, color: Colors.blue, decoration: TextDecoration.underline),
+                    recognizer: TapGestureRecognizer()..onTap = () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MapViewer(address: post.location,)));
+                    }),
+              ])),
     ],
   );
 }

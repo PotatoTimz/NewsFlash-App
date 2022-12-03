@@ -8,6 +8,10 @@
 */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 /*
   PostOnline class contains the info needed to populate an online post
@@ -31,6 +35,7 @@ class PostOnline{
   String? imageURL;
   String? title;
   List<dynamic>? comments;
+  String? location;
 
   int? numReposts;
   int? numLikes;
@@ -39,7 +44,7 @@ class PostOnline{
   DocumentReference? reference;
 
   //Constructor to create an Online Post
-  PostOnline({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription, this.numLikes, this.numDislikes, this.numReposts, this.comments});
+  PostOnline({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription, this.numLikes, this.numDislikes, this.numReposts, this.comments, this.location});
 
   //Converts a PostOnline into a map
   PostOnline.fromMap(var map, {this.reference}){
@@ -53,6 +58,7 @@ class PostOnline{
     this.numReposts = map['numReposts'];
     this.numLikes = map['numLikes'];
     this.numDislikes = map['numDislikes'];
+    this.location = map['location'];
   }
 
   //Converts a map into a PostOnline
@@ -69,6 +75,7 @@ class PostOnline{
       'numReposts' :this.numReposts,
       'numLikes':this.numLikes,
       'numDislikes':this.numDislikes,
+      'location':this.location,
     };
   }
 

@@ -1,7 +1,12 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:groupproject/models/PostOnline.dart';
 import 'package:provider/provider.dart';
 import 'package:groupproject/notifications.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -29,6 +34,16 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
   String? imageURL = '';
   String? timeString = '';
   String? shortDecription = '';
+  String? locationText;
+
+  geocode() async {
+    Position location = await Geolocator.getCurrentPosition();
+    final List<Placemark> places = await placemarkFromCoordinates(
+        location.latitude,
+        location.longitude
+    );
+    return "${places[0].locality.toString()}, ${places[0].administrativeArea.toString()}";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +105,19 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                 //TODO: Set time to datetime.now() so it's automatically showed
 
                 ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      LocationPermission permission;
+                      permission = await Geolocator.requestPermission();
+                      if (permission == LocationPermission.denied) {
+                        locationText = "";
+                      }
+                      else {
+                        locationText = await geocode();
+                      }
                       String? postTime = formatTime();
                       timeString = postTime;
                       notificationLater();
+                      print(locationText);
                       PostOnline newPost = PostOnline(
                         userName: userName,
                         timeString: timeString,
@@ -105,6 +129,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                         numLikes: 0,
                         numDislikes: 0,
                         comments: [],
+                        location: locationText,
                       );
                       var snackBar = const SnackBar(
                           duration: Duration(seconds: 1),
