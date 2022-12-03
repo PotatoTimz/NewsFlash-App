@@ -8,6 +8,7 @@ import 'package:groupproject/views/HomePageTabs/Polls/ViewPollStatistics.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MakePostPage.dart';
 import "package:provider/provider.dart";
 import 'package:groupproject/notifications.dart';
+import 'package:groupproject/views/HomePageTabs/ProfilePage/EditProfilePage.dart';
 
 import 'models/PostOffline.dart';
 
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
                 '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
                 '/createNewPoll' : (context) => const CreatePollPage(),
+                '/editprofile' : (context) =>  EditProfilePage(),
               },
             );
           } else {

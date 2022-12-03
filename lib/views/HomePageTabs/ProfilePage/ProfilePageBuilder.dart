@@ -5,6 +5,14 @@ import '../../../models/Account.dart';
 import '../../../models/PostOnline.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import '../../DatabaseEditors.dart';
+import 'EditProfilePage.dart';
+
+class ProfileArguments{
+  final Account? loggedInUser;
+  //final String password;
+
+  ProfileArguments(this.loggedInUser);
+}
 
 class ProfilePageBuilder extends StatefulWidget {
   ProfilePageBuilder({Key? key, this.loggedInUser}) : super(key: key);
@@ -38,6 +46,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
             }
 
             print("Data Loaded!");
+            //Navigator.of(context,'/Profile').pop();
             return ListView(
               children: [
                 Container(
@@ -79,7 +88,21 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                         const SizedBox(height: 10),
 
                         ElevatedButton.icon(
-                          onPressed: () {}, //need to add page
+                          onPressed: ()async{
+                            print(widget.loggedInUser!.userName);
+                            setState(() {
+
+                            });
+                            var updatedProfile = await Navigator.pushNamed(
+                                context, '/editprofile',
+                                arguments: ProfileArguments(
+                                    widget.loggedInUser,
+                                    //"${widget.loggedInUser!.userName}",
+                                    //"${widget.loggedInUser!.password}"
+                                )
+                            );
+
+                          }, //need to add page
                           icon: Icon(
                             // <-- Icon
                             Icons.edit,
