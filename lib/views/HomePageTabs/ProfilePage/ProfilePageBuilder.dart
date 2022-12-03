@@ -69,7 +69,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                 flex: 1,
                                 child: CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Colors.teal,
                                   child: Text(widget.loggedInUser!.userName![0] +
                                       widget.loggedInUser!.userName![widget.loggedInUser!.userName!.length - 1]),
                                 )),
