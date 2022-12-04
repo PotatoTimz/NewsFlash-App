@@ -76,9 +76,28 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                 flex: 2,
                                 child: Row(
                                   children: [
-                                    Text("${widget.loggedInUser!.numposts} Posts" ),
-                                    Text(" ${widget.loggedInUser!.followers} Followers "),
-                                    Text(" ${widget.loggedInUser!.following} Following"),
+                                    Column(
+                                      children: [
+                                        Text("${widget.loggedInUser!.numposts}" ),
+                                        Text("Posts",style: TextStyle(fontSize: 14)),
+
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Column(
+                                      children: [
+                                        Text("${widget.loggedInUser!.followers}" ),
+                                        Text("Posts"),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Column(
+                                      children: [
+                                        Text("${widget.loggedInUser!.following}" ),
+                                        Text("Following"),
+                                      ],
+                                    ),
+                                    Spacer(),
                                   ],
                                 )),
 
