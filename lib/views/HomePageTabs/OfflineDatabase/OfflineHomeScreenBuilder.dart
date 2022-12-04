@@ -25,13 +25,11 @@ class OfflineHomeScreen extends StatefulWidget {
 }
 
 class _OfflineHomeScreenState extends State<OfflineHomeScreen> {
-
   @override
   Widget build(BuildContext context) {
-
     PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
 
-    return  ListView.builder(
+    return ListView.builder(
         itemCount: postsListBLoC.posts.length,
         itemBuilder: (context, index) {
           return Container(
@@ -44,20 +42,23 @@ class _OfflineHomeScreenState extends State<OfflineHomeScreen> {
                     selectedIndex = index;
                   });
                 },
-                onLongPress: (){
+                onLongPress: () {
                   setState(() {
-                    selectedIndex = 1^1000;
+                    selectedIndex = 1 ^ 1000;
                   });
                 },
                 child: Container(
-                  decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
+                  decoration: BoxDecoration(
+                      color: selectedIndex != index
+                          ? Colors.white
+                          : Colors.black12),
                   padding: const EdgeInsets.all(15),
-                  child: selectedIndex != index ? buildShortPost(context, index) : buildLongPost(context, index),
-                )
-            ),
+                  child: selectedIndex != index
+                      ? buildShortPost(context, index)
+                      : buildLongPost(context, index),
+                )),
           );
-        }
-    );
+        });
   }
 }
 
@@ -66,7 +67,7 @@ class _OfflineHomeScreenState extends State<OfflineHomeScreen> {
   by default it contains smaller font and contains the "shortDescription"
   to make it easier to navigate
  */
-Widget buildShortPost(context, index){
+Widget buildShortPost(context, index) {
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
 
   return Column(
@@ -83,12 +84,11 @@ Widget buildShortPost(context, index){
               ),
               const SizedBox(width: 20),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                      "${postsListBLoC.posts[index].userName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text("${postsListBLoC.posts[index].userName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 15)),
                   IconButton(
                     onPressed: () {
                       _showDeleteDialog(context, index);
@@ -106,10 +106,8 @@ Widget buildShortPost(context, index){
       Row(
         children: [
           Text("${postsListBLoC.posts[index].timeString}",
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 10)
-          ),
+              style:
+                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
         ],
       ),
       const SizedBox(height: 10),
@@ -117,8 +115,7 @@ Widget buildShortPost(context, index){
       //Title
       Text(
         "${postsListBLoC.posts[index].title}",
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 25),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: 10),
@@ -129,10 +126,7 @@ Widget buildShortPost(context, index){
         child: Text(
           "${postsListBLoC.posts[index].shortDescription}",
           style: const TextStyle(
-              fontSize: 15,
-              fontStyle: FontStyle.italic,
-              color: Colors.black54
-          ),
+              fontSize: 15, fontStyle: FontStyle.italic, color: Colors.black54),
         ),
       ),
       const SizedBox(height: 20),
@@ -140,19 +134,19 @@ Widget buildShortPost(context, index){
       //Image
       Image.network("${postsListBLoC.posts[index].imageURL}"),
       //image section
-      const SizedBox(height: 20,),
+      const SizedBox(
+        height: 20,
+      ),
     ],
   );
 }
-
 
 /*
   buildLongPost creates the full version of the post with bigger fonts
   and "longDescription" will be created when the selectedId corresponds
   to the current post.
  */
-Widget buildLongPost(context, index){
-
+Widget buildLongPost(context, index) {
   PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context);
 
   return Column(
@@ -169,12 +163,11 @@ Widget buildLongPost(context, index){
               ),
               const SizedBox(width: 20),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                      "${postsListBLoC.posts[index].userName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  Text("${postsListBLoC.posts[index].userName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20)),
                   IconButton(
                     onPressed: () {
                       _showDeleteDialog(context, index);
@@ -192,10 +185,8 @@ Widget buildLongPost(context, index){
       Row(
         children: [
           Text("${postsListBLoC.posts[index].timeString}",
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 15)
-          ),
+              style:
+                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
         ],
       ),
       const SizedBox(height: 10),
@@ -203,8 +194,7 @@ Widget buildLongPost(context, index){
       //Title
       Text(
         "${postsListBLoC.posts[index].title}",
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 30),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: 10),
@@ -220,10 +210,14 @@ Widget buildLongPost(context, index){
       const SizedBox(height: 20),
 
       //Image
-      Image.network("${postsListBLoC.posts[index].imageURL}", fit: BoxFit.fill,),
+      Image.network(
+        "${postsListBLoC.posts[index].imageURL}",
+        fit: BoxFit.fill,
+      ),
       //image section
-      const SizedBox(height: 20,),
-
+      const SizedBox(
+        height: 20,
+      ),
     ],
   );
 }
@@ -232,31 +226,31 @@ Widget buildLongPost(context, index){
    _showDeleteDialog asks the user whether they would like to delete the current
   OfflinePost from the database
  */
-_showDeleteDialog(context, index){
-  PostsListBLoC postsListBLoC = Provider.of<PostsListBLoC>(context, listen: false);
+_showDeleteDialog(context, index) {
+  PostsListBLoC postsListBLoC =
+      Provider.of<PostsListBLoC>(context, listen: false);
 
-  showDialog(context: context,
-      barrierDismissible: false,                              //doesnt allow user to click of alert pop up
-      builder: (context){
+  showDialog(
+      context: context,
+      barrierDismissible: false, //doesnt allow user to click of alert pop up
+      builder: (context) {
         return AlertDialog(
           title: const Text("Delete Post"),
-          content: const Text("Are you sure you would like to delete this post"),
+          content:
+              const Text("Are you sure you would like to delete this post"),
           actions: [
             TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text("Cancel")
-            ),
+                child: Text("Cancel")),
             TextButton(
-                onPressed: (){
+                onPressed: () {
                   deleteOfflineDatabase(index, context);
                   Navigator.of(context).pop();
                 },
-                child: Text("Delete")
-            )
+                child: Text("Delete"))
           ],
         );
-      }
-  );
+      });
 }

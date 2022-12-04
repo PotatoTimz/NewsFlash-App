@@ -40,24 +40,24 @@ class OnlineHomeScreen extends StatefulWidget {
  Holding down will unselect the post turning it back to its default view
 */
 class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
-
   final fireBaseInstance = FirebaseFirestore.instance.collection('posts');
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: fireBaseInstance.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot snapshot){
-          if(!snapshot.hasData){
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
             print("Data is missing from buildGradeList");
             return CircularProgressIndicator();
-          }
-          else{
+          } else {
             print("Data Loaded!");
             return ListView.builder(
                 itemCount: snapshot.data.docs.length,
-                itemBuilder: (context, index){
-                  PostOnline post = PostOnline.fromMap(snapshot.data.docs[index].data(), reference: snapshot.data.docs[index].reference);
+                itemBuilder: (context, index) {
+                  PostOnline post = PostOnline.fromMap(
+                      snapshot.data.docs[index].data(),
+                      reference: snapshot.data.docs[index].reference);
                   return Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
@@ -69,33 +69,35 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                               // print("selected index $selectedIndex");
                             });
                           },
-                          onLongPress: (){
+                          onLongPress: () {
                             setState(() {
-                              selectedIndex = 1^1000;
+                              selectedIndex = 1 ^ 1000;
                             });
                           },
-                          onDoubleTap: ()async{
+                          onDoubleTap: () async {
                             setState(() {
                               selectedIndex = index;
                             });
                             var updatedPost = await Navigator.pushNamed(
-                                context, '/commentPage',
-                                arguments: {'fireBaseInstance': fireBaseInstance}
-                            );
+                                context, '/commentPage', arguments: {
+                              'fireBaseInstance': fireBaseInstance
+                            });
                           },
-
                           child: Container(
-                            decoration: BoxDecoration(color: selectedIndex != index ? Colors.white : Colors.black12 ),
+                            decoration: BoxDecoration(
+                                color: selectedIndex != index
+                                    ? Colors.white
+                                    : Colors.black12),
                             padding: const EdgeInsets.all(15),
-                            child: selectedIndex!= index ? buildOnlineShortPost(post, context, index, fireBaseInstance) : buildOnlineLongPost(post, context, index, fireBaseInstance),
-                          )
-                      )
-                  );
-                }
-            );
+                            child: selectedIndex != index
+                                ? buildOnlineShortPost(
+                                    post, context, index, fireBaseInstance)
+                                : buildOnlineLongPost(
+                                    post, context, index, fireBaseInstance),
+                          )));
+                });
           }
-        }
-    );
+        });
   }
 }
 
@@ -103,8 +105,7 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
 * Navigates into a new page which returns a new OnlinePost which is than used
 * to replace data stored within the firebase database
 */
-Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async{
-
+Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async {
   var newPost = await Navigator.pushNamed(context, r'/createPostPage');
   updateOnlineDatabase(index, newPost, fireBaseInstance);
 }
@@ -115,9 +116,7 @@ Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async{
  is equal to the index of the post.
  Displays information with a larger font and displays the longDiscription
 */
-Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
-
-
+Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
   return Column(
     children: [
       //Username and settings button
@@ -126,18 +125,18 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 20,
-                child: Text("AA", textScaleFactor: 1),
+                // changed circle avatar text to show first letter of username.(removed const from circleavatar)
+                child: Text("${post.userName[0]}", textScaleFactor: 1),
               ),
               const SizedBox(width: 20),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                      "${post.userName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  Text("${post.userName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20)),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
@@ -156,10 +155,8 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
       Row(
         children: [
           Text("${post.timeString}",
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 15)
-          ),
+              style:
+                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
         ],
       ),
       const SizedBox(height: 10),
@@ -167,8 +164,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
       //Title
       Text(
         "${post.title}",
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 30),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: 10),
@@ -184,9 +180,14 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
       const SizedBox(height: 20),
 
       //Image
-      Image.network("${post.imageURL}", fit: BoxFit.fill,),
+      Image.network(
+        "${post.imageURL}",
+        fit: BoxFit.fill,
+      ),
       //image section
-      const SizedBox(height: 20,),
+      const SizedBox(
+        height: 20,
+      ),
 
       //likes, dislikes, etc
       Row(
@@ -217,8 +218,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Likes: ${post.numLikes}");
             },
-            icon:
-            const Icon(Icons.thumb_up_outlined, size: 20),
+            icon: const Icon(Icons.thumb_up_outlined, size: 20),
           ),
           Text("  ${post.numLikes}"),
           const SizedBox(width: 20),
@@ -228,8 +228,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
               print("Number of Dislikes: ${post.numDislikes}");
             },
-            icon: const Icon(Icons.thumb_down_outlined,
-                size: 20),
+            icon: const Icon(Icons.thumb_down_outlined, size: 20),
           ),
           Text("  ${post.numDislikes}"),
         ],
@@ -240,12 +239,22 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
               text: "Posted from: ",
               style: TextStyle(fontSize: 15, color: Colors.black),
               children: <TextSpan>[
-                TextSpan(text: "${post.location}",
-                    style: TextStyle(fontSize: 15, color: Colors.blue, decoration: TextDecoration.underline),
-                    recognizer: TapGestureRecognizer()..onTap = () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MapViewer(address: post.location,)));
-                    }),
-              ])),
+            TextSpan(
+                text: "${post.location}",
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MapViewer(
+                                  address: post.location,
+                                )));
+                  }),
+          ])),
     ],
   );
 }
@@ -256,8 +265,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance){
  the post and will happened if the selected index is not equal to the post's index
  Displays information with a smaller font and displays the shortDescription
 */
-Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
-
+Widget buildOnlineShortPost(post, context, index, fireBaseInstance) {
   return Column(
     children: [
       //Username and settings button
@@ -266,18 +274,18 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 15,
-                child: Text("AA", textScaleFactor: 1),
+                // changed circle avatar text to show first letter of username.(removed const from circleavatar)
+                child: Text("${post.userName[0]}", textScaleFactor: 1),
               ),
               const SizedBox(width: 20),
               Row(
-                mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                      "${post.userName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  Text("${post.userName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 15)),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
@@ -296,10 +304,8 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
       Row(
         children: [
           Text("${post.timeString}",
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 10)
-          ),
+              style:
+                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
         ],
       ),
       const SizedBox(height: 10),
@@ -307,8 +313,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
       //Title
       Text(
         "${post.title}",
-        style: const TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 25),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: 10),
@@ -319,10 +324,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
         child: Text(
           "${post.shortDescription}",
           style: const TextStyle(
-              fontSize: 15,
-              fontStyle: FontStyle.italic,
-              color: Colors.black54
-          ),
+              fontSize: 15, fontStyle: FontStyle.italic, color: Colors.black54),
         ),
       ),
       const SizedBox(height: 20),
@@ -330,7 +332,9 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
       //Image
       Image.network("${post.imageURL}"),
       //image section
-      const SizedBox(height: 20,),
+      const SizedBox(
+        height: 20,
+      ),
     ],
   );
 }
@@ -343,65 +347,67 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance){
  this post will replace the previous post
  Save post will add the post into the sqlite database
 */
-_showPostOptions(context, index, fireBaseInstance, post){
+_showPostOptions(context, index, fireBaseInstance, post) {
   showDialog(
       context: context,
-      builder: (context){
+      builder: (context) {
         return SimpleDialog(
           title: const Text("What would you like to do"),
           children: [
             SimpleDialogOption(
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
                   goToUpdatePostPage(context, index, fireBaseInstance);
                 },
-                child: const Text("Edit post")
-            ),
+                child: const Text("Edit post")),
             SimpleDialogOption(
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
                   _showDeleteDialog(context, fireBaseInstance);
                 },
-                child: const Text("Delete post")
-            ),
+                child: const Text("Delete post")),
             SimpleDialogOption(
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
-                  PostOffline downloadedPost = PostOffline(userName: post.userName, timeString: post.timeString, longDescription: post.longDescription, shortDescription: post.shortDescription, imageURL: post.imageURL, title: post.title, id: lastInsertedId+1);
+                  PostOffline downloadedPost = PostOffline(
+                      userName: post.userName,
+                      timeString: post.timeString,
+                      longDescription: post.longDescription,
+                      shortDescription: post.shortDescription,
+                      imageURL: post.imageURL,
+                      title: post.title,
+                      id: lastInsertedId + 1);
                   addOfflineDatabase(downloadedPost, context);
                 },
-                child: const Text("Save post")
-            ),
+                child: const Text("Save post")),
           ],
         );
-      }
-  );
+      });
 }
 
 //Asks the user if they would like to delete a the post from the online database
-_showDeleteDialog(context, fireBaseInstance){
-  showDialog(context: context,
-      barrierDismissible: false,                              //doesn't allow user to click of alert pop up
-      builder: (context){
+_showDeleteDialog(context, fireBaseInstance) {
+  showDialog(
+      context: context,
+      barrierDismissible: false, //doesn't allow user to click of alert pop up
+      builder: (context) {
         return AlertDialog(
           title: const Text("Delete Post"),
-          content: const Text("Are you sure you would like to delete this post"),
+          content:
+              const Text("Are you sure you would like to delete this post"),
           actions: [
             TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text("Cancel")
-            ),
+                child: Text("Cancel")),
             TextButton(
-                onPressed: (){
+                onPressed: () {
                   deleteOnlineDatabase(selectedIndex, fireBaseInstance);
                   Navigator.of(context).pop();
                 },
-                child: Text("Delete")
-            )
+                child: Text("Delete"))
           ],
         );
-      }
-  );
+      });
 }
