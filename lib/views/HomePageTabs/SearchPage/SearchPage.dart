@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:groupproject/views/HomePageTabs/SearchPage/SearchPageResult.dart';
 import '../../../models/Account.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,22 +8,26 @@ class SearchPage extends SearchDelegate {
   SearchPage({@required this.loggedInUser});
   final loggedInUser;
 
-  Set<String> Accounts = {};
+  Set<Account> Accounts = {};
+  Set<String> Users = {};
   Set<String> searchTerms = {};
 
   Future<Set<String>> getsearchTerms() async {
     searchTerms.clear();
 
-    var response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
+    var response = await http.get(Uri.parse('https://api.json-generator.com/templates/kxOSQepYhNiQ/data?access_token=2c20vp5dg2ugdoko5g1xodm0ib87mhoaykv9cn2c'));
     if (response.statusCode == 200) {
-      Accounts = {};
+      print("made it here");
       List items = jsonDecode(response.body);
       for (var item in items) {
-        Accounts.add(item['username']);
+        print(item);
+        Users.add(item['username']);
+        Accounts.add(Account(userName: item['username'], password: item['password'],
+        email: item['email'], numposts: 0, followers: item['followers'], following: item['following']));
       }
     }
 
-    for (var account in Accounts) {
+    for (var account in Users) {
       if (!(loggedInUser.userName.toLowerCase == account)) {
         searchTerms.add(account);
       }
@@ -64,8 +68,12 @@ class SearchPage extends SearchDelegate {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 var result = snapshot.data!.elementAt(index);
-                return ListTile(
+                return GestureDetector(onTap: () {
+                  print("made it to result");
+                },
+                child: ListTile(
                   title: Text(result),
+                ),
                 );
               },
             );
@@ -92,8 +100,19 @@ class SearchPage extends SearchDelegate {
             itemCount: matchQuery.length,
             itemBuilder: (context, index) {
               var result = matchQuery[index];
-              return ListTile(
+              return GestureDetector(onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchPageResult(
+                              user: Accounts.elementAt(index),
+                              loggedInUser: loggedInUser,
+                    )
+                    ));
+              },
+              child: ListTile(
                 title: Text(result),
+              ),
               );
             },
           );
