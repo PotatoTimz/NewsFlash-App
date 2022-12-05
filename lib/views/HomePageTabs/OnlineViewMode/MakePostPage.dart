@@ -36,6 +36,8 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
   String? shortDecription = '';
   String? locationText;
 
+  // Function that gets the users current location then returns a string that returns
+  // their city and province or equivalent
   geocode() async {
     Position location = await Geolocator.getCurrentPosition();
     final List<Placemark> places = await placemarkFromCoordinates(
@@ -106,11 +108,14 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
 
                 ElevatedButton(
                     onPressed: () async {
+                      // Requests permission for location
                       LocationPermission permission;
                       permission = await Geolocator.requestPermission();
+                      // If permission is denied, no location is set
                       if (permission == LocationPermission.denied) {
                         locationText = "";
                       }
+                      // If permission is granted then it gets the users location
                       else {
                         locationText = await geocode();
                       }
