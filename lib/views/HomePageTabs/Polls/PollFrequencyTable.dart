@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import '../../../models/Polls.dart';
 import 'package:charts_flutter_new/flutter.dart' as charts;
 
+/*
+ PollsFrequencyTable displays polls in an alternative mode displaying data through
+ the user of flutters charts
+ The data will display each post as well as a barchart representing the amount
+ of votes given to each option
+ @author Andre Alix
+ @version Final - Group Project
+ @since 2022-12-06
+ */
 class PollFrequencyTable extends StatefulWidget {
   PollFrequencyTable({Key? key, this.pollsList}) : super(key: key);
 
@@ -13,6 +22,10 @@ class PollFrequencyTable extends StatefulWidget {
 
 class _PollFrequencyTableState extends State<PollFrequencyTable> {
 
+  /*
+    On initialization will add options to polls that have less than 4 options
+    to stop errors when creating the barchart
+   */
   @override
   void initState() {
     for (int i = 0; i < widget.pollsList!.length; i++) {
@@ -26,6 +39,15 @@ class _PollFrequencyTableState extends State<PollFrequencyTable> {
     }
   }
 
+  /*
+    Displays polls through the use of a bar chart
+    The Bar chart will display the title given to the poll as well as 4 bars indicating
+    the amount of votes are given to each option
+    Blue = Option 1,
+    Red = Option 2,
+    Orange = Option 3,
+    Green = Option 4
+   */
   @override
   Widget build(BuildContext context) {
 

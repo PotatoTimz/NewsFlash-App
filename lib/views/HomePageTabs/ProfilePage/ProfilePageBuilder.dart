@@ -1,17 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import '../../../models/Account.dart';
 import '../../../models/PostOnline.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import '../../DatabaseEditors.dart';
-import 'EditProfilePage.dart';
-
-class ProfileArguments{
-  final Account? loggedInUser;
-  //final String password;
-
-  ProfileArguments(this.loggedInUser);
-}
 
 class ProfilePageBuilder extends StatefulWidget {
   ProfilePageBuilder({Key? key, this.loggedInUser}) : super(key: key);
@@ -45,7 +38,6 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
             }
 
             print("Data Loaded!");
-            //Navigator.of(context,'/Profile').pop();
             return ListView(
               children: [
                 Container(
@@ -68,7 +60,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                 flex: 1,
                                 child: CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: Colors.teal,
+                                  backgroundColor: Colors.blue,
                                   child: Text(widget.loggedInUser!.userName![0] +
                                       widget.loggedInUser!.userName![widget.loggedInUser!.userName!.length - 1]),
                                 )),
@@ -76,41 +68,9 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                 flex: 2,
                                 child: Row(
                                   children: [
-                                    Column(
-                                      children: [
-                                        Text("${widget.loggedInUser!.numposts}" ),
-                                        Text("Posts",style: TextStyle(fontSize: 14)),
-
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    Column(
-                                      children: [
-                                        Text("${widget.loggedInUser!.followers}" ),
-                                        Text("Followers"),
-                                      ],
-                                    ),
-                                    Spacer(),
-
-                                    GestureDetector(
-                                      onTap: () async{
-                                        var updatedProfile = await Navigator.pushNamed(
-                                            context, '/followinglist',
-                                            arguments: ProfileArguments(
-                                              widget.loggedInUser,
-                                            )
-
-                                        );
-
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Text("${widget.loggedInUser!.following}" ),
-                                          Text("Following"),
-                                        ],
-                                      )
-                                    ),
-                                    Spacer(),
+                                    Text("${widget.loggedInUser!.numposts} Posts" ),
+                                    Text(" ${widget.loggedInUser!.followers} Followers "),
+                                    Text(" ${widget.loggedInUser!.following} Following"),
                                   ],
                                 )),
 
@@ -118,23 +78,8 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                         ),
                         const SizedBox(height: 10),
 
-
                         ElevatedButton.icon(
-                          onPressed: ()async{
-                            print(widget.loggedInUser!.userName);
-                            setState(() {
-
-                            });
-                            var updatedProfile = await Navigator.pushNamed(
-                                context, '/editprofile',
-                                arguments: ProfileArguments(
-                                    widget.loggedInUser,
-                                    //"${widget.loggedInUser!.userName}",
-                                    //"${widget.loggedInUser!.password}"
-                                )
-                            );
-
-                          }, //need to add page
+                          onPressed: () {}, //need to add page
                           icon: Icon(
                             // <-- Icon
                             Icons.edit,
