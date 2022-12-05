@@ -10,4 +10,4 @@ class Account {
 
 }
 
-final mainaccount = Account(userName: "myusername",password: "mypassword",email: "temp@gmail.com",numposts: 0,followers: 0,following: 0 );
+final mainaccount = Account(userName: "myusername",password: "mypassword",email: "temp@gmail.com",numposts: 0,followers: 0,following: 5 );

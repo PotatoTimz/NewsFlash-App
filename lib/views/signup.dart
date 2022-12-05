@@ -108,7 +108,7 @@ class _SignupPageState extends State<SignupPage > {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Future.delayed(Duration(seconds: 1));
       var loginStatus = Navigator.pushNamed(context, r'/homePage',
-          arguments: {'userName': u, 'password': e});
+          arguments: {'userName': u, 'password': p});
     });
 
   }

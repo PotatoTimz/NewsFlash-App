@@ -87,15 +87,28 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                     Column(
                                       children: [
                                         Text("${widget.loggedInUser!.followers}" ),
-                                        Text("Posts"),
+                                        Text("Followers"),
                                       ],
                                     ),
                                     Spacer(),
-                                    Column(
-                                      children: [
-                                        Text("${widget.loggedInUser!.following}" ),
-                                        Text("Following"),
-                                      ],
+
+                                    GestureDetector(
+                                      onTap: () async{
+                                        var updatedProfile = await Navigator.pushNamed(
+                                            context, '/followinglist',
+                                            arguments: ProfileArguments(
+                                              widget.loggedInUser,
+                                            )
+
+                                        );
+
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Text("${widget.loggedInUser!.following}" ),
+                                          Text("Following"),
+                                        ],
+                                      )
                                     ),
                                     Spacer(),
                                   ],
@@ -104,6 +117,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                           ],
                         ),
                         const SizedBox(height: 10),
+
 
                         ElevatedButton.icon(
                           onPressed: ()async{
