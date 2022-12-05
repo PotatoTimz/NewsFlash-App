@@ -245,6 +245,8 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
                     fontSize: 15,
                     color: Colors.blue,
                     decoration: TextDecoration.underline),
+                // When tapping the blue underlined text that contains the location of where
+                // the post was from, it takes you to the mapviewer page
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     Navigator.push(

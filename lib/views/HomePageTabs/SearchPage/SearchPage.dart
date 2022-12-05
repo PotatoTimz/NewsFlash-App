@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:groupproject/views/HomePageTabs/SearchPage/SearchPageResult.dart';
+import 'package:groupproject/views/HomePageTabs/SearchPage/UserProfilePage.dart';
 import '../../../models/Account.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,15 +12,18 @@ class SearchPage extends SearchDelegate {
   Set<String> Users = {};
   Set<String> searchTerms = {};
 
+  // Function to get the search terms that will show up in the search bar
+  // or in other words, the usernames of accounts
   Future<Set<String>> getsearchTerms() async {
     searchTerms.clear();
 
+    // JSON file that stores some sample user accounts for functionality testing purposes
     var response = await http.get(Uri.parse('https://api.json-generator.com/templates/kxOSQepYhNiQ/data?access_token=2c20vp5dg2ugdoko5g1xodm0ib87mhoaykv9cn2c'));
     if (response.statusCode == 200) {
-      print("made it here");
+      // Decodes from JSON to list
       List items = jsonDecode(response.body);
       for (var item in items) {
-        print(item);
+        // Takes info from the list and builds it into class / list
         Users.add(item['username']);
         Accounts.add(Account(userName: item['username'], password: item['password'],
         email: item['email'], numposts: 0, followers: item['followers'], following: item['following']));
@@ -28,6 +31,7 @@ class SearchPage extends SearchDelegate {
     }
 
     for (var account in Users) {
+      // If the logged in user isn't in the JSON file since you shouldn't need to search for yourself
       if (!(loggedInUser.userName.toLowerCase == account)) {
         searchTerms.add(account);
       }
@@ -36,6 +40,7 @@ class SearchPage extends SearchDelegate {
     return searchTerms;
   }
 
+  // Function that builds the clear searchbar and accounts for the current text in the searchbar
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -48,6 +53,7 @@ class SearchPage extends SearchDelegate {
     ];
   }
 
+  // Function that builds the button that allows the user to exit out of the searchbar
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
@@ -58,6 +64,7 @@ class SearchPage extends SearchDelegate {
     );
   }
 
+  // Function that builds the results of the searchbar on the initial load
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder(
@@ -68,8 +75,16 @@ class SearchPage extends SearchDelegate {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 var result = snapshot.data!.elementAt(index);
+                // If user / element is clicked, it brings to their user profile page
                 return GestureDetector(onTap: () {
-                  print("made it to result");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserProfilePage(
+                              user: Accounts.elementAt(index),
+                              loggedInUser: loggedInUser,
+                    )
+                    ));
                 },
                 child: ListTile(
                   title: Text(result),
@@ -84,6 +99,7 @@ class SearchPage extends SearchDelegate {
       });
   }
 
+  // Function that builds the results of the searchbar after something has been typed for suggestions
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder(
@@ -100,11 +116,12 @@ class SearchPage extends SearchDelegate {
             itemCount: matchQuery.length,
             itemBuilder: (context, index) {
               var result = matchQuery[index];
+              // If user / element is clicked, it brings to their user profile page
               return GestureDetector(onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPageResult(
+                        builder: (context) => UserProfilePage(
                               user: Accounts.elementAt(index),
                               loggedInUser: loggedInUser,
                     )

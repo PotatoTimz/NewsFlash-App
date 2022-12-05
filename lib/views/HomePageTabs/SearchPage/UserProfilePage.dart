@@ -5,17 +5,17 @@ import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 
-class SearchPageResult extends StatefulWidget {
-  SearchPageResult({Key? key, this.user, this.loggedInUser}) : super(key: key);
+class UserProfilePage extends StatefulWidget {
+  UserProfilePage({Key? key, this.user, this.loggedInUser}) : super(key: key);
 
   Account? user;
   Account? loggedInUser;
 
   @override
-  State<SearchPageResult> createState() => _SearchPageResultState();
+  State<UserProfilePage> createState() => _UserProfilePage();
 }
 
-class _SearchPageResultState extends State<SearchPageResult> {
+class _UserProfilePage extends State<UserProfilePage> {
   final fireBaseInstance = FirebaseFirestore.instance.collection('posts');
   bool follow = true;
 
@@ -29,6 +29,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
             return CircularProgressIndicator();
           } else {
 
+            // Loads the posts that belong to the user profile that was clicked
             List<dynamic> profilePosts = [];
             for (int i = 0; i < snapshot.data.docs.length; i++){
               PostOnline post = PostOnline.fromMap(snapshot.data.docs[i].data(), reference: snapshot.data.docs[i].reference);
@@ -38,6 +39,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                 widget.user!.numposts = widget.user!.numposts! + 1;
               }
             }
+            // Returns the header of the profile
             return Material(
               child: ListView(
                 children: [
@@ -46,7 +48,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
+                          // The bolded username at the top
                           Text(
                             "${widget.user!.userName}",
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -56,6 +58,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              // The icon for a profile picture
                               Flexible(
                                   flex: 1,
                                   child: CircleAvatar(
@@ -64,6 +67,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                                     child: Text(widget.user!.userName![0] +
                                         widget.user!.userName![widget.user!.userName!.length - 1]),
                                   )),
+                              // Number of posts, followers, and following the user has
                               Flexible(
                                   flex: 2,
                                   child: Row(
@@ -97,6 +101,9 @@ class _SearchPageResultState extends State<SearchPageResult> {
                           ),
                           const SizedBox(height: 10),
 
+                          // The follow button that allows the currently logged in user to follow / unfollow.
+                          // Updates the values of the text of the button, amount of followers the profile page
+                          // has and the number of following the currently logged in user has
                           ElevatedButton.icon(
                             onPressed: () async {
                               if (follow) {
@@ -119,8 +126,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                           ),
                           const SizedBox(height: 20),
 
-                          //needs to be changed for only my posts
-
+                          // Builds the posts that the user has made
                           GridView.builder(
                               shrinkWrap: true,
                               physics: const ScrollPhysics(),

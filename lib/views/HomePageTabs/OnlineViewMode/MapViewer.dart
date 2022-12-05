@@ -22,6 +22,8 @@ class _MapViewer extends State<MapViewer> with TickerProviderStateMixin {
   String address;
   _MapViewer(this.address);
 
+  // A function that takes a post location of city + provnince or equivalent and returns the address
+  // in coordinates
   getLocation() async {
     final List<Location> locations = await locationFromAddress(address);
     return LatLng(locations[0].latitude, locations[0].longitude);
@@ -39,6 +41,8 @@ class _MapViewer extends State<MapViewer> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text("Map"),
       ),
+      // Futurerbuilder that waits for getLocation() function to finish calculating the coordinates
+      // before building. Builds a map view that is centered on the post's location.
       body: FutureBuilder(
         future: getLocation(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
