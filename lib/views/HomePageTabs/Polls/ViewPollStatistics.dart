@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../models/Polls.dart';
-import 'PollFrequencyTable.dart';
+import "PollFrequencyTable.dart";
 
 /*
  ViewPollStatistics displays polls using a data table containing the title of each of the

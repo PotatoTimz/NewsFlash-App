@@ -239,7 +239,6 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
               text: "Posted from: ",
               style: TextStyle(fontSize: 15, color: Colors.black),
               children: <TextSpan>[
-<<<<<<< HEAD
                 TextSpan(
                     text: "${post.location}",
                     style: TextStyle(
@@ -254,22 +253,6 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MapViewer(
-=======
-            TextSpan(
-                text: "${post.location}",
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline),
-                // When tapping the blue underlined text that contains the location of where
-                // the post was from, it takes you to the mapviewer page
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MapViewer(
->>>>>>> 44a4b6cb8a05ce25302267964e4d6bdf8f03c9bc
                                   address: post.location,
                                 )));
                       }),
