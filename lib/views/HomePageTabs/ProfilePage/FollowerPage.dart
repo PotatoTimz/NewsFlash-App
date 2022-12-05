@@ -6,42 +6,41 @@ import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.d
 
 import '../../../models/Account.dart';
 
-
-class FollowingPage extends StatefulWidget {
-  FollowingPage({Key? key}) : super(key: key);
+class FollowerPage extends StatefulWidget {
+  FollowerPage({Key? key}) : super(key: key);
 
   @override
-  State<FollowingPage> createState() => _FollowingePageState();
+  State<FollowerPage> createState() => _FollowerPageState();
 }
 
-var followinglist = ["followinguser1","followinguser2","followinguser3","followinguser4","followinguser5",];
+var followerlist = ["followeruser1","followeruser2","followeruser3","followeruser4","followeruser5",];
 
-class _FollowingePageState extends State<FollowingPage> {
+class _FollowerPageState extends State<FollowerPage> {
   var formKey = GlobalKey<FormState>();
 
-  //Function that displays accounts that user follows
+  //Function that displays accounts that follow user
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ProfileArguments;
 
-    int? fol = args.loggedInUser?.following;
+    int? fol = args.loggedInUser?.followers;
 
     int i = 100;
     return Scaffold(
-      appBar: AppBar(title: const Text("Following List"),),
+      appBar: AppBar(title: const Text("Follower List"),),
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: [
 
-          for (int i=0; i<followinglist.length; i++)
+          for (int i=0; i<followerlist.length; i++)
             ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
 
-                children: [Text(followinglist[i],style: TextStyle(fontSize: 20)),
-                  IconButton(icon: Icon(Icons.delete,size: 20),onPressed: ()=> {deleteuser(i),args.loggedInUser?.following =  followinglist.length,Navigator.of(context).pop(),
+                children: [Text(followerlist[i],style: TextStyle(fontSize: 20)),
+                  IconButton(icon: Icon(Icons.delete,size: 20,),onPressed: ()=> {deleteuser(i),args.loggedInUser?.followers =  followerlist.length,Navigator.of(context).pop(),
                     Navigator.pushNamed(
-                        context, '/followinglist', arguments: ProfileArguments(
+                        context, '/followerlist', arguments: ProfileArguments(
                       args.loggedInUser,
 
                     )) })],
@@ -69,11 +68,11 @@ class _FollowingePageState extends State<FollowingPage> {
     );
   }
 
-  //Function that removes a user from their following list
+  //Function that removes a user from their follower list
   deleteuser(index) async{
-    followinglist.removeAt(index);
+    followerlist.removeAt(index);
     print(index);
-    print(followinglist);
+    print(followerlist);
 
   }
 }

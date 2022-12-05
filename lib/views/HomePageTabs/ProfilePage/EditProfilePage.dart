@@ -8,11 +8,7 @@ import '../../../models/Account.dart';
 
 
 class EditProfilePage extends StatefulWidget {
-
-
   EditProfilePage({Key? key}) : super(key: key);
-
-
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -21,7 +17,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   var formKey = GlobalKey<FormState>();
   
-
+  //Function that allows user to edit their username or password
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ProfileArguments;
@@ -29,8 +25,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String? username1 = args.loggedInUser?.userName;
     String? password1 = args.loggedInUser?.password;
 
-    //final un = args.username;
-    //final pw = args.password;
     return Scaffold(
       appBar: AppBar(title: const Text("Edit Profile"),),
       body: Form(
@@ -80,7 +74,4 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-
-
-
 }
