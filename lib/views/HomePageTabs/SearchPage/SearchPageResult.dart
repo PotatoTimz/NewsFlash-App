@@ -70,7 +70,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                                     children: [
                                       Column(
                                         children: [
-                                          Text("${widget.loggedInUser!.numposts}" ,style: TextStyle(fontSize: 14),),
+                                          Text("${widget.user!.numposts}" ,style: TextStyle(fontSize: 14),),
                                           Text("Posts",style: TextStyle(fontSize: 14)),
 
                                         ],
@@ -78,14 +78,14 @@ class _SearchPageResultState extends State<SearchPageResult> {
                                       Spacer(),
                                       Column(
                                         children: [
-                                          Text("${widget.loggedInUser!.followers}" ,style: TextStyle(fontSize: 14)),
-                                          Text("Posts",style: TextStyle(fontSize: 14)),
+                                          Text("${widget.user!.followers}" ,style: TextStyle(fontSize: 14)),
+                                          Text("Followers",style: TextStyle(fontSize: 14)),
                                         ],
                                       ),
                                       Spacer(),
                                       Column(
                                         children: [
-                                          Text("${widget.loggedInUser!.following}",style: TextStyle(fontSize: 14) ),
+                                          Text("${widget.user!.following}",style: TextStyle(fontSize: 14) ),
                                           Text("Following",style: TextStyle(fontSize: 14)),
                                         ],
                                       ),
@@ -102,7 +102,7 @@ class _SearchPageResultState extends State<SearchPageResult> {
                               if (follow) {
                                 setState(() {
                                   widget.user!.followers = widget.user!.followers! + 1;
-                                  widget.loggedInUser!.following = widget.loggedInUser!.following! - 1;
+                                  widget.loggedInUser!.following = widget.loggedInUser!.following! + 1;
                                   follow = !follow;
                                 });
                               }
