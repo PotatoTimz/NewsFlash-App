@@ -20,10 +20,8 @@ class _SignupPageState extends State<SignupPage > {
 
   var formKey = GlobalKey<FormState>();
 
-  final fireBaseInstance = FirebaseFirestore.instance.collection('posts');
+  final fireBaseInstance = FirebaseFirestore.instance.collection('accounts');
   bool follow = true;
-
-
 
 
 
