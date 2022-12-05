@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/CommentPage.dart';
@@ -6,6 +7,7 @@ import 'package:groupproject/views/HomePageTabs/OnlineViewMode/CreateCommentPage
 import 'package:groupproject/views/HomePageTabs/Polls/CreatePollPage.dart';
 import 'package:groupproject/views/HomePageTabs/Polls/ViewPollStatistics.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MakePostPage.dart';
+import 'package:groupproject/views/signup.dart';
 import "package:provider/provider.dart";
 import 'package:groupproject/notifications.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePage/EditProfilePage.dart';
@@ -119,6 +121,16 @@ class _LoginPageState extends State<LoginPage> {
         arguments: {'userName': userName, 'password': password});
   }
 
+  Future<void> goToSignUpPage() async {
+    await Future.delayed(Duration(seconds: 1));
+    var SignUpStatus = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SignupPage()
+        ));
+
+  }
+
   void notificationNow() async {
     notifications.sendNotification("t", "body", "payload");
   }
@@ -213,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Don't have an account?"),
-                    TextButton(onPressed: () {}, child: Text('Sign Up'))
+                    TextButton(onPressed: goToSignUpPage, child: Text('Sign Up'))
                   ],
                 )
               ]),
@@ -221,4 +233,6 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
+
+
 }
