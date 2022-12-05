@@ -83,7 +83,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ),
             IconButton(
                 onPressed: () {
-                  showSearch(context: context, delegate: SearchPage());
+                  showSearch(context: context, delegate: SearchPage(loggedInUser: loggedInAccount));
                 },
                 icon: const Icon(Icons.search)),
             IconButton(
