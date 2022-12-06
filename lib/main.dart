@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
                 '/homePage': (context) =>
                     const HomePageWidget(title: "HomePage"),
                 '/createPostPage': (context) =>
-                    const CreatePostWidget(title: "Create a Post"),
+                    const CreatePostWidget(title: "Create a Post",),
                 '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
                 '/createNewPoll': (context) => const CreatePollPage(),

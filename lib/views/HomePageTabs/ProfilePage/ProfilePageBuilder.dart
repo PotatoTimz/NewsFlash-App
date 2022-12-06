@@ -16,7 +16,7 @@ class ProfileArguments{
 class ProfilePageBuilder extends StatefulWidget {
   ProfilePageBuilder({Key? key, this.loggedInUser}) : super(key: key);
 
-  Account? loggedInUser;
+  final Account? loggedInUser;
 
   @override
   State<ProfilePageBuilder> createState() => _ProfilePageBuilderState();

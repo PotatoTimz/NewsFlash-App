@@ -164,7 +164,11 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
       //Title
       Text(
         "${post.title}",
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+        style: const TextStyle(
+            fontFamily: 'PlayfairDisplay',
+            //fontWeight: FontWeight.bold,
+            fontSize: 30,
+        ),
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: 10),
@@ -174,7 +178,10 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Text(
           "${post.longDescription}",
-          style: const TextStyle(fontSize: 15),
+          textAlign: TextAlign.justify,
+          style: const TextStyle(
+              fontSize: 15,
+          ),
         ),
       ),
       const SizedBox(height: 20),

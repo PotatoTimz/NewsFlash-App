@@ -76,7 +76,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           actions: [
             IconButton(
               onPressed: () {
-                showAddPostDialog(context);
+                showAddPostDialog(context, loggedInAccount);
               },
               tooltip: "Submit your article!",
               icon: const Icon(Icons.add),
@@ -123,7 +123,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
-  showAddPostDialog(context){
+  showAddPostDialog(context, loggedInAccount){
     showDialog(
         context: context,
         builder: (context){
@@ -132,7 +132,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             children: [
               SimpleDialogOption(
                   onPressed: (){
-                    goToCreatePostPage(context);
+                    goToCreatePostPage(context, loggedInAccount);
                   },
                   child: const Text("Written post")
               ),
@@ -152,8 +152,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
    * goToCreatePostPage navigates onto to create post page and can be
    * done from any of the tabs within the HomePage navigator.
    */
-  Future<void> goToCreatePostPage(context) async {
-    var newPost = await Navigator.pushNamed(context, r'/createPostPage');
+  Future<void> goToCreatePostPage(context, loggedInAccount) async {
+    var newPost = await Navigator.pushNamed(context, 
+        r'/createPostPage',
+    arguments: ProfileArguments(loggedInAccount));
     if (newPost == null) {
       print("Nothing was inputed");
     } else {
@@ -162,7 +164,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 
   Future<void> goToCreatePollsPage(context) async{
-    var newPoll = await Navigator.pushNamed(context, r'/createNewPoll');
+    var newPoll = await Navigator.pushNamed(
+        context, 
+        r'/createNewPoll',);
     if (newPoll == null){
       print("Nothing was Inputted");
     }

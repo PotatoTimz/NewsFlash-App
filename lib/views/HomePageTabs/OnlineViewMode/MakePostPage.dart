@@ -10,6 +10,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../../models/Account.dart';
+import '../ProfilePage/ProfilePageBuilder.dart';
+
 /*Sources:
 Stopped overflow error: https://www.geeksforgeeks.org/flutter-pixels-overflow-error-while-launching-keyboard/#:~:text=Solution%20%3A,the%20entire%20UI%20is%20centered.
 Date format: https://stackoverflow.com/questions/51579546/how-to-format-datetime-in-flutter
@@ -49,6 +52,8 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    //Get the account information, to automatically fill in username.
+    final args = ModalRoute.of(context)!.settings.arguments as ProfileArguments;
     tz.initializeTimeZones();
     notifications.init();
 
@@ -63,9 +68,10 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Author",
-                    hintText: "Enter your Username here",
+                  enabled: isUsername(args.loggedInUser?.userName),
+                  decoration: InputDecoration(
+                    labelText: displayAuthor(args.loggedInUser?.userName),
+                    hintText: args.loggedInUser?.userName!,
                   ),
                   onChanged: (value) {
                     userName = value;
@@ -95,7 +101,6 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                     longDescription = value;
                   },
                 ),
-                //TODO: Captions for the images
                 TextFormField(
                   decoration: const InputDecoration(
                       labelText: "Image",
@@ -104,7 +109,11 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                     imageURL = value;
                   },
                 ),
-                //TODO: Set time to datetime.now() so it's automatically showed
+                Padding(padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 0.0)),
+                Text(formatTime()!, style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
 
                 ElevatedButton(
                     onPressed: () async {
@@ -124,7 +133,7 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
                       notificationLater();
                       print(locationText);
                       PostOnline newPost = PostOnline(
-                        userName: userName,
+                        userName: postUserName(userName, args.loggedInUser?.userName),
                         timeString: timeString,
                         longDescription: longDescription,
                         imageURL: imageURL,
@@ -182,4 +191,36 @@ class _CreatePostWidgetState extends State<CreatePostWidget> {
     }
     return "${now.day}-${now.month}-${now.year} at $adjustedHour:$adjustedMinute:$adjustedSecond$dayHalf";
   }
+
+  //If there is a user logged in, The text field to add an Author will be disabled
+  bool isUsername(String? user)
+  {
+    if (user != "Anonymous")
+      {
+        return false;
+      }
+    return true;
+  }
+
+  //If there is a user logged in, the Text Field will display their user name instead
+  String displayAuthor(String? user)
+  {
+    if (user != "Anonymous")
+      {
+        return user!;
+      }
+    return "Author";
+  }
+
+  //If there is a user logged in, their username will be automatically inserted as the username for the post
+  //Otherwise, it will demonstrate that a guest is logged in.
+  String postUserName(String? textUser, String? user)
+  {
+    if (textUser == "")
+      {
+        return user!;
+      }
+    return "${textUser!} (Guest)";
+  }
+
 }
