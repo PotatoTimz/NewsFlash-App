@@ -134,8 +134,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void notificationPeriodic() async {
-    notifications.sendNotificationPeriodic("Time to BREEL",
-        "send a post and see what your friends are up to!", "payload");
+    notifications.sendNotificationPeriodic("NEWSFLASH!",
+        "Post an article to see what is going on in YOUR world.", "payload");
   }
 
   Widget buildLogin() {
@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           padding: EdgeInsets.symmetric(vertical: 20),
           child: const Text(
-            "B-REEL",
+            "NEWSFLASH",
             style: TextStyle(
                 color: Colors.teal,
                 fontSize: 30,
