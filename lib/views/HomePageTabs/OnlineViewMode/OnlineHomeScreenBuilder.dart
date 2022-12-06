@@ -57,6 +57,7 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
           } else {
             print("Data Loaded!");
             return ListView.builder(
+              scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   PostOnline post = PostOnline.fromMap(
@@ -88,17 +89,20 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                               'user': widget.loggedInAccount,
                             });
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: selectedIndex != index
-                                    ? Colors.white
-                                    : Colors.black12),
-                            padding: const EdgeInsets.all(15),
-                            child: selectedIndex != index
-                                ? buildOnlineShortPost(
-                                    post, context, index, fireBaseInstance, widget.loggedInAccount)
-                                : buildOnlineLongPost(
-                                    post, context, index, fireBaseInstance, widget.loggedInAccount),
+                          child: SingleChildScrollView(
+                            child: Container(
+                              width: 400,
+                              decoration: BoxDecoration(
+                                  color: selectedIndex != index
+                                      ? Colors.white
+                                      : Colors.black12),
+                              padding: const EdgeInsets.all(15),
+                              child: selectedIndex != index
+                                  ? buildOnlineShortPost(
+                                      post, context, index, fireBaseInstance, widget.loggedInAccount)
+                                  : buildOnlineLongPost(
+                                      post, context, index, fireBaseInstance, widget.loggedInAccount),
+                            ),
                           )));
                 });
           }
@@ -139,9 +143,12 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("${post.userName}",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20)),
+                  Container(
+                    width: 250,
+                    child: Text("${post.userName}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                  ),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
@@ -185,7 +192,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
           children: [
             Expanded(
                 child: Container(
-                  width: 150,
+                  //width: 150,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "${post.longDescription}".substring(0, ("${post.longDescription}".length/2).floor()),
@@ -197,15 +204,15 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
                 ),
             ),
             const VerticalDivider(
-              width: 10,
+              width: 3,
               thickness: 1,
-              indent: 10,
+              indent: 3,
               endIndent: 0,
               color: Colors.black54,
             ),
             Expanded(
               child: Container(
-                width: 150,
+                //width: 150,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "${post.longDescription}".substring(("${post.longDescription}".length/2).floor()),
@@ -246,9 +253,10 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
           const SizedBox(width: 20),
           IconButton(
             onPressed: () {
+              _repost(post, loggedInAccount);
               post.numReposts += 1;
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
-              print("Number of Reposts: ${post.numReposts}");
+              //print("Number of Reposts: ${post.numReposts}");
             },
             icon: const Icon(Icons.repeat, size: 20),
           ),
@@ -258,7 +266,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
             onPressed: () {
               post.numLikes += 1;
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
-              print("Number of Likes: ${post.numLikes}");
+              //print("Number of Likes: ${post.numLikes}");
             },
             icon: const Icon(Icons.thumb_up_outlined, size: 20),
           ),
@@ -268,7 +276,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
             onPressed: () {
               post.numDislikes += 1;
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
-              print("Number of Dislikes: ${post.numDislikes}");
+              //print("Number of Dislikes: ${post.numDislikes}");
             },
             icon: const Icon(Icons.thumb_down_outlined, size: 20),
           ),
@@ -327,9 +335,12 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("${post.userName}",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15)),
+                  Container(
+                    width: 250,
+                    child: Text("${post.userName}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
@@ -385,6 +396,25 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
       ),
     ],
   );
+}
+
+ _repost(post, loggedInAccount)
+{
+  PostOnline newPost = PostOnline(
+    userName: "${loggedInAccount?.userName} Reposting:  ${post.userName}",
+    timeString: post.timeString,
+    longDescription: post.longDescription,
+    imageURL: post.imageURL,
+    title: "Repost of: ${post.title}",
+    shortDescription: post.shortDescription,
+    numReposts: 0,
+    numLikes: 0,
+    numDislikes: 0,
+    comments: [],
+    location: post.location,
+  );
+  print("Adding repost to the database!");
+  insertOnlineDatabase(newPost);
 }
 
 /*
