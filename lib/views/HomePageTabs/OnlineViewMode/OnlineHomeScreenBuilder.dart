@@ -12,6 +12,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/constants.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MapViewer.dart';
+import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
+import '../../../models/Account.dart';
 import '../../../models/PostOffline.dart';
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
@@ -22,7 +24,9 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class OnlineHomeScreen extends StatefulWidget {
-  OnlineHomeScreen({Key? key}) : super(key: key);
+  OnlineHomeScreen({Key? key, this.loggedInAccount}) : super(key: key);
+
+  final Account? loggedInAccount;
 
   @override
   State<OnlineHomeScreen> createState() => _OnlineHomeScreenState();
@@ -80,7 +84,8 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                             });
                             var updatedPost = await Navigator.pushNamed(
                                 context, '/commentPage', arguments: {
-                              'fireBaseInstance': fireBaseInstance
+                              'fireBaseInstance': fireBaseInstance,
+                              'user': widget.loggedInAccount,
                             });
                           },
                           child: Container(
@@ -91,9 +96,9 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                             padding: const EdgeInsets.all(15),
                             child: selectedIndex != index
                                 ? buildOnlineShortPost(
-                                    post, context, index, fireBaseInstance)
+                                    post, context, index, fireBaseInstance, widget.loggedInAccount)
                                 : buildOnlineLongPost(
-                                    post, context, index, fireBaseInstance),
+                                    post, context, index, fireBaseInstance, widget.loggedInAccount),
                           )));
                 });
           }
@@ -105,8 +110,8 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
 * Navigates into a new page which returns a new OnlinePost which is than used
 * to replace data stored within the firebase database
 */
-Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async {
-  var newPost = await Navigator.pushNamed(context, r'/createPostPage');
+Future<void> goToUpdatePostPage(context, index, fireBaseInstance, loggedInAccount) async {
+  var newPost = await Navigator.pushNamed(context, r'/createPostPage', arguments: ProfileArguments(loggedInAccount));
   updateOnlineDatabase(index, newPost, fireBaseInstance);
 }
 
@@ -116,7 +121,7 @@ Future<void> goToUpdatePostPage(context, index, fireBaseInstance) async {
  is equal to the index of the post.
  Displays information with a larger font and displays the longDiscription
 */
-Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
+Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccount) {
   return Column(
     children: [
       //Username and settings button
@@ -140,7 +145,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
-                      _showPostOptions(context, index, fireBaseInstance, post);
+                      _showPostOptions(context, index, fireBaseInstance, post, loggedInAccount);
                     },
                     icon: const Icon(Icons.more_horiz),
                   ),
@@ -174,14 +179,44 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
       const SizedBox(height: 10),
 
       //Description
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Text(
-          "${post.longDescription}",
-          textAlign: TextAlign.justify,
-          style: const TextStyle(
-              fontSize: 15,
-          ),
+      IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                child: Container(
+                  width: 150,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    "${post.longDescription}".substring(0, ("${post.longDescription}".length/2).floor()),
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+            ),
+            const VerticalDivider(
+              width: 10,
+              thickness: 1,
+              indent: 10,
+              endIndent: 0,
+              color: Colors.black54,
+            ),
+            Expanded(
+              child: Container(
+                width: 150,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "${post.longDescription}".substring(("${post.longDescription}".length/2).floor()),
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       const SizedBox(height: 20),
@@ -274,7 +309,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
  the post and will happened if the selected index is not equal to the post's index
  Displays information with a smaller font and displays the shortDescription
 */
-Widget buildOnlineShortPost(post, context, index, fireBaseInstance) {
+Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAccount) {
   return Column(
     children: [
       //Username and settings button
@@ -298,7 +333,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance) {
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
-                      _showPostOptions(context, index, fireBaseInstance, post);
+                      _showPostOptions(context, index, fireBaseInstance, post, loggedInAccount);
                     },
                     icon: const Icon(Icons.more_vert),
                   ),
@@ -360,7 +395,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance) {
  this post will replace the previous post
  Save post will add the post into the sqlite database
 */
-_showPostOptions(context, index, fireBaseInstance, post) {
+_showPostOptions(context, index, fireBaseInstance, post, loggedInAccount) {
   showDialog(
       context: context,
       builder: (context) {
@@ -370,7 +405,7 @@ _showPostOptions(context, index, fireBaseInstance, post) {
             SimpleDialogOption(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  goToUpdatePostPage(context, index, fireBaseInstance);
+                  goToUpdatePostPage(context, index, fireBaseInstance, loggedInAccount);
                 },
                 child: const Text("Edit post")),
             SimpleDialogOption(

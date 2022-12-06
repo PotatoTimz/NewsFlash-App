@@ -15,6 +15,7 @@ import 'package:groupproject/views/DatabaseEditors.dart';
 import 'package:groupproject/views/HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import '../models/PostOnline.dart';
 import 'HomePageTabs/OnlineViewMode/OnlineHomeScreenBuilder.dart';
+import 'HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
 
 /*
   CommentPage creates the comment page given a OnlinePost
@@ -43,6 +44,7 @@ class _CommentPageState extends State<CommentPage> {
 
     final routeData = ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
     final CollectionReference<Map<String, dynamic>> fireBaseInstance = routeData['fireBaseInstance'] as CollectionReference<Map<String, dynamic>>;
+    final loggedInAccount = routeData['user'] as ProfileArguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +72,7 @@ class _CommentPageState extends State<CommentPage> {
 
                   Container(
                     padding: EdgeInsets.all(15),
-                    child: buildOnlineLongPost(post, context, selectedIndex, fireBaseInstance),
+                    child: buildOnlineLongPost(post, context, selectedIndex, fireBaseInstance, loggedInAccount),
                   ),
 
                   Container(

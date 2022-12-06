@@ -17,7 +17,6 @@ import '../ProfilePage/ProfilePageBuilder.dart';
 Stopped overflow error: https://www.geeksforgeeks.org/flutter-pixels-overflow-error-while-launching-keyboard/#:~:text=Solution%20%3A,the%20entire%20UI%20is%20centered.
 Date format: https://stackoverflow.com/questions/51579546/how-to-format-datetime-in-flutter
 */
-//TODO: Username should eventually be automatically filled in via the username that the user is currently logged in with.
 class CreatePostWidget extends StatefulWidget {
   const CreatePostWidget({Key? key, this.title}) : super(key: key);
 
