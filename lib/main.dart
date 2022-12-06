@@ -7,6 +7,7 @@ import 'package:groupproject/views/HomePageTabs/OnlineViewMode/CreateCommentPage
 import 'package:groupproject/views/HomePageTabs/Polls/CreatePollPage.dart';
 import 'package:groupproject/views/HomePageTabs/Polls/ViewPollStatistics.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MakePostPage.dart';
+import 'package:groupproject/views/HomePageTabs/ProfilePage/FollowerPage.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePage/FollowingPage.dart';
 import 'package:groupproject/views/signup.dart';
 import "package:provider/provider.dart";
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
                 '/createNewPoll': (context) => const CreatePollPage(),
                 '/editprofile': (context) => EditProfilePage(),
                 '/followinglist': (context) => FollowingPage(),
+                '/followerlist': (context) => FollowerPage(),
               },
             );
           } else {

@@ -91,13 +91,22 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                       ],
                                     ),
                                     Spacer(),
-                                    Column(
-                                      children: [
-                                        Text(
-                                            "${widget.loggedInUser!.followers}"),
-                                        Text('Followers'),
-                                      ],
-                                    ),
+                                    GestureDetector(
+                                        onTap: () async {
+                                          var updatedProfile =
+                                          await Navigator.pushNamed(
+                                              context, '/followerlist',
+                                              arguments: ProfileArguments(
+                                                widget.loggedInUser,
+                                              ));
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                                "${widget.loggedInUser!.followers}"),
+                                            Text('Followers'),
+                                          ],
+                                        )),
                                     Spacer(),
                                     GestureDetector(
                                         onTap: () async {
