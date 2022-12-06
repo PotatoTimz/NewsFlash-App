@@ -398,6 +398,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
   );
 }
 
+//When a user reposts, it will be Reposted under the current user, but still give credit to the user it was reposted from
  _repost(post, loggedInAccount)
 {
   PostOnline newPost = PostOnline(
@@ -413,7 +414,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
     comments: [],
     location: post.location,
   );
-  print("Adding repost to the database!");
+  //print("Adding repost to the database!");
   insertOnlineDatabase(newPost);
 }
 

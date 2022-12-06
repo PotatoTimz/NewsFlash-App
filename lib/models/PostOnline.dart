@@ -46,7 +46,8 @@ class PostOnline{
   //Constructor to create an Online Post
   PostOnline({this.userName, this.timeString, this.longDescription, this.imageURL, this.title, this.shortDescription, this.numLikes, this.numDislikes, this.numReposts, this.comments, this.location});
 
-  //Converts a PostOnline into a map
+
+  //Converts a map into a PostOnline
   PostOnline.fromMap(var map, {this.reference}){
     this.userName = map['userName'];
     this.timeString = map['timeString'];
@@ -61,7 +62,7 @@ class PostOnline{
     this.location = map['location'];
   }
 
-  //Converts a map into a PostOnline
+  //Converts a PostOnline into a map
   Map<String, Object?> toMapOnline(){
     return{
       // 'name' : this.name,
