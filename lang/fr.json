@@ -20,6 +20,11 @@
     "profile_posts": "postes",
     "profile_followers": "suiveurs",
     "profile_following": "suivant",
-    "edit_profile": "Editer le profil"
+    "edit_profile": "Editer le profil",
+
+    "post_dialog": "Qu'est-ce que tu aimerais faire?",
+    "edit_post": "modifier le message",
+    "delete_post": "supprimer le message",
+    "save_post": "enregistrer le message"
   
 }

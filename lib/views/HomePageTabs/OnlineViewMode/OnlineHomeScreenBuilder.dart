@@ -10,14 +10,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:groupproject/constants.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MapViewer.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
+import '../../../app_localizations.dart';
 import '../../../models/Account.dart';
 import '../../../models/PostOffline.dart';
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 import '../../HomePage.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class OnlineHomeScreen extends StatefulWidget {
   OnlineHomeScreen({Key? key, this.loggedInAccount}) : super(key: key);
@@ -53,7 +58,6 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
           } else {
             print("Data Loaded!");
             return ListView.builder(
-              scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   PostOnline post = PostOnline.fromMap(
@@ -80,28 +84,23 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                               selectedIndex = index;
                             });
                             var updatedPost = await Navigator.pushNamed(
-                                context, '/commentPage', arguments: {
-                              'fireBaseInstance': fireBaseInstance,
-                              'user': widget.loggedInAccount,
-                            });
-                            if(updatedPost != null) {
-                              updateOnlineDatabase(index, updatedPost, fireBaseInstance);
-                            }
+                                context, '/commentPage',
+                                arguments: {
+                                  'fireBaseInstance': fireBaseInstance,
+                                  'user': widget.loggedInAccount,
+                                });
                           },
-                          child: SingleChildScrollView(
-                            child: Container(
-                              width: 400,
-                              decoration: BoxDecoration(
-                                  color: selectedIndex != index
-                                      ? Colors.white
-                                      : Colors.black12),
-                              padding: const EdgeInsets.all(15),
-                              child: selectedIndex != index
-                                  ? buildOnlineShortPost(
-                                      post, context, index, fireBaseInstance, widget.loggedInAccount)
-                                  : buildOnlineLongPost(
-                                      post, context, index, fireBaseInstance, widget.loggedInAccount),
-                            ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: selectedIndex != index
+                                    ? Colors.white
+                                    : Colors.black12),
+                            padding: const EdgeInsets.all(15),
+                            child: selectedIndex != index
+                                ? buildOnlineShortPost(post, context, index,
+                                    fireBaseInstance, widget.loggedInAccount)
+                                : buildOnlineLongPost(post, context, index,
+                                    fireBaseInstance, widget.loggedInAccount),
                           )));
                 });
           }
@@ -113,8 +112,10 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
 * Navigates into a new page which returns a new OnlinePost which is than used
 * to replace data stored within the firebase database
 */
-Future<void> goToUpdatePostPage(context, index, fireBaseInstance, loggedInAccount) async {
-  var newPost = await Navigator.pushNamed(context, r'/createPostPage', arguments: ProfileArguments(loggedInAccount));
+Future<void> goToUpdatePostPage(
+    context, index, fireBaseInstance, loggedInAccount) async {
+  var newPost = await Navigator.pushNamed(context, r'/createPostPage',
+      arguments: ProfileArguments(loggedInAccount));
   updateOnlineDatabase(index, newPost, fireBaseInstance);
 }
 
@@ -124,7 +125,8 @@ Future<void> goToUpdatePostPage(context, index, fireBaseInstance, loggedInAccoun
  is equal to the index of the post.
  Displays information with a larger font and displays the longDiscription
 */
-Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccount) {
+Widget buildOnlineLongPost(
+    post, context, index, fireBaseInstance, loggedInAccount) {
   return Column(
     children: [
       //Username and settings button
@@ -142,16 +144,14 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    width: 250,
-                    child: Text("${post.userName}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20)),
-                  ),
+                  Text("${post.userName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20)),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
-                      _showPostOptions(context, index, fireBaseInstance, post, loggedInAccount);
+                      _showPostOptions(context, index, fireBaseInstance, post,
+                          loggedInAccount);
                     },
                     icon: const Icon(Icons.more_horiz),
                   ),
@@ -161,7 +161,6 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
           ),
         ],
       ),
-      const SizedBox(height: 10),
 
       //time
       Row(
@@ -177,9 +176,9 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
       Text(
         "${post.title}",
         style: const TextStyle(
-            fontFamily: 'PlayfairDisplay',
-            //fontWeight: FontWeight.bold,
-            fontSize: 30,
+          fontFamily: 'PlayfairDisplay',
+          //fontWeight: FontWeight.bold,
+          fontSize: 30,
         ),
         textAlign: TextAlign.center,
       ),
@@ -191,31 +190,33 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-                child: Container(
-                  //width: 150,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "${post.longDescription}".substring(0, ("${post.longDescription}".length/2).floor()),
-                    textAlign: TextAlign.justify,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
+              child: Container(
+                width: 150,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "${post.longDescription}".substring(
+                      0, ("${post.longDescription}".length / 2).floor()),
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(
+                    fontSize: 15,
                   ),
                 ),
+              ),
             ),
             const VerticalDivider(
-              width: 3,
+              width: 10,
               thickness: 1,
-              indent: 3,
+              indent: 10,
               endIndent: 0,
               color: Colors.black54,
             ),
             Expanded(
               child: Container(
-                //width: 150,
+                width: 150,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  "${post.longDescription}".substring(("${post.longDescription}".length/2).floor()),
+                  "${post.longDescription}".substring(
+                      ("${post.longDescription}".length / 2).floor()),
                   textAlign: TextAlign.justify,
                   style: const TextStyle(
                     fontSize: 15,
@@ -266,7 +267,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
             onPressed: () {
               post.numLikes += 1;
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
-              //print("Number of Likes: ${post.numLikes}");
+              print("Number of Likes: ${post.numLikes}");
             },
             icon: const Icon(Icons.thumb_up_outlined, size: 20),
           ),
@@ -276,7 +277,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
             onPressed: () {
               post.numDislikes += 1;
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
-              //print("Number of Dislikes: ${post.numDislikes}");
+              print("Number of Dislikes: ${post.numDislikes}");
             },
             icon: const Icon(Icons.thumb_down_outlined, size: 20),
           ),
@@ -317,7 +318,8 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
  the post and will happened if the selected index is not equal to the post's index
  Displays information with a smaller font and displays the shortDescription
 */
-Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAccount) {
+Widget buildOnlineShortPost(
+    post, context, index, fireBaseInstance, loggedInAccount) {
   return Column(
     children: [
       //Username and settings button
@@ -335,16 +337,14 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    width: 250,
-                    child: Text("${post.userName}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15)),
-                  ),
+                  Text("${post.userName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 15)),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
-                      _showPostOptions(context, index, fireBaseInstance, post, loggedInAccount);
+                      _showPostOptions(context, index, fireBaseInstance, post,
+                          loggedInAccount);
                     },
                     icon: const Icon(Icons.more_vert),
                   ),
@@ -369,9 +369,9 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
       Text(
         "${post.title}",
         style: const TextStyle(
-            fontFamily: 'PlayfairDisplay',
-            //fontWeight: FontWeight.bold,
-            fontSize: 25,
+          fontFamily: 'PlayfairDisplay',
+          //fontWeight: FontWeight.bold,
+          fontSize: 25,
         ),
         textAlign: TextAlign.center,
       ),
@@ -398,9 +398,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
   );
 }
 
-//When a user reposts, it will be Reposted under the current user, but still give credit to the user it was reposted from
- _repost(post, loggedInAccount)
-{
+_repost(post, loggedInAccount) {
   PostOnline newPost = PostOnline(
     userName: "${loggedInAccount?.userName} Reposting:  ${post.userName}",
     timeString: post.timeString,
@@ -414,7 +412,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
     comments: [],
     location: post.location,
   );
-  //print("Adding repost to the database!");
+  print("Adding repost to the database!");
   insertOnlineDatabase(newPost);
 }
 
@@ -431,20 +429,23 @@ _showPostOptions(context, index, fireBaseInstance, post, loggedInAccount) {
       context: context,
       builder: (context) {
         return SimpleDialog(
-          title: const Text("What would you like to do"),
+          title: Text(AppLocalizations.of(context).translate('post_dialog')),
           children: [
             SimpleDialogOption(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  goToUpdatePostPage(context, index, fireBaseInstance, loggedInAccount);
+                  goToUpdatePostPage(
+                      context, index, fireBaseInstance, loggedInAccount);
                 },
-                child: const Text("Edit post")),
+                child:
+                    Text(AppLocalizations.of(context).translate('edit_post'))),
             SimpleDialogOption(
                 onPressed: () {
                   Navigator.of(context).pop();
                   _showDeleteDialog(context, fireBaseInstance);
                 },
-                child: const Text("Delete post")),
+                child: Text(
+                    AppLocalizations.of(context).translate('delete_post'))),
             SimpleDialogOption(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -458,7 +459,8 @@ _showPostOptions(context, index, fireBaseInstance, post, loggedInAccount) {
                       id: lastInsertedId + 1);
                   addOfflineDatabase(downloadedPost, context);
                 },
-                child: const Text("Save post")),
+                child:
+                    Text(AppLocalizations.of(context).translate('save_post'))),
           ],
         );
       });
