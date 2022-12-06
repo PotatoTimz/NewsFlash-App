@@ -8,6 +8,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../app_localizations.dart';
 import '../../../models/PostOffline.dart';
 import '../../DatabaseEditors.dart';
 
@@ -236,8 +237,8 @@ _showDeleteDialog(context, index) {
       builder: (context) {
         return AlertDialog(
           title: const Text("Delete Post"),
-          content:
-              const Text("Are you sure you would like to delete this post"),
+          content: Text(
+              AppLocalizations.of(context).translate('delete_post_confirm')),
           actions: [
             TextButton(
                 onPressed: () {
