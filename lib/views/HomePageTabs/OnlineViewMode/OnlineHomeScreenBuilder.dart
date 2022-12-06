@@ -161,6 +161,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
           ),
         ],
       ),
+      const SizedBox(height: 10),
 
       //time
       Row(
