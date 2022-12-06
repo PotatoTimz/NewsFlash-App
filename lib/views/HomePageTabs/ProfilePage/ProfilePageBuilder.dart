@@ -192,7 +192,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                             widget.loggedInUser,
                                             //"${widget.loggedInUser!.userName}",
                                             //"${widget.loggedInUser!.password}"
-                                          ));
+                                          )).then((_)=> setState(() {}));
                                 }, //need to add page
                                 icon: Icon(
                                   // <-- Icon
