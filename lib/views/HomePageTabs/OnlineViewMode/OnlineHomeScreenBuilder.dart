@@ -185,46 +185,11 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
       ),
       const SizedBox(height: 10),
 
-      //Description
+      //Description, if it's longer than a certain amount of characters, it will make 2 columns.
       IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                child: Container(
-                  //width: 150,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "${post.longDescription}".substring(0, ("${post.longDescription}".length/2).floor()),
-                    textAlign: TextAlign.justify,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-            ),
-            const VerticalDivider(
-              width: 3,
-              thickness: 1,
-              indent: 3,
-              endIndent: 0,
-              color: Colors.black54,
-            ),
-            Expanded(
-              child: Container(
-                //width: 150,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  "${post.longDescription}".substring(("${post.longDescription}".length/2).floor()),
-                  textAlign: TextAlign.justify,
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: post.longDescription.length > 150
+            ? _buildDividedPost(post)
+            : _buildSinglePost(post)
       ),
       const SizedBox(height: 20),
 
@@ -418,6 +383,20 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance, loggedInAcco
   insertOnlineDatabase(newPost);
 }
 
+String _findCutOff(String text, int half)
+{
+  int cutOffPoint = (text.length/2).floor();
+  while (text[cutOffPoint] != ' ')
+  {
+    cutOffPoint++;
+  }
+  if (half == 1)
+  {
+     return text.substring(0, cutOffPoint);
+  }
+  return text.substring(cutOffPoint);
+}
+
 /*
  _showPostOptions shows a dialog asking what the user would like to
  do with the post. They may delete, edit or save the post.
@@ -489,4 +468,67 @@ _showDeleteDialog(context, fireBaseInstance) {
           ],
         );
       });
+}
+
+Widget _buildDividedPost(PostOnline post)
+{
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Expanded(
+        child: Container(
+          //width: 150,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            _findCutOff("${post.longDescription}", 1),
+            textAlign: TextAlign.justify,
+            style: const TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+      const VerticalDivider(
+        width: 3,
+        thickness: 1,
+        indent: 3,
+        endIndent: 0,
+        color: Colors.black54,
+      ),
+      Expanded(
+        child: Container(
+          //width: 150,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            _findCutOff("${post.longDescription}", 2),
+            textAlign: TextAlign.justify,
+            style: const TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildSinglePost (PostOnline post)
+{
+  return Column(
+    children: [
+      Expanded(
+        child: Container(
+          //width: 150,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            "${post.longDescription}",
+            textAlign: TextAlign.justify,
+            style: const TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
 }
