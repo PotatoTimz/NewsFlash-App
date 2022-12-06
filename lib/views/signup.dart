@@ -57,6 +57,7 @@ class _SignupPageState extends State<SignupPage > {
                         },
                       ),
                       TextFormField(
+                        obscureText: true,
                         decoration: const InputDecoration(
                           labelText: "Password",
                           hintText: "Add a password",
