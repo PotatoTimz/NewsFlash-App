@@ -56,6 +56,7 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
               localeResolutionCallback: (locale, supportedLocales) {
@@ -70,10 +71,10 @@ class MyApp extends StatelessWidget {
               },
               home: const LoginPage(title: 'Flutter Demo Home Page'),
               routes: {
-                '/homePage': (context) => HomePageWidget(
-                    title: 'Home Page'),
-                '/createPostPage': (context) =>
-                    const CreatePostWidget(title: "Create a Post",),
+                '/homePage': (context) => HomePageWidget(title: 'Home Page'),
+                '/createPostPage': (context) => const CreatePostWidget(
+                      title: "Create a Post",
+                    ),
                 '/commentPage': (context) => CommentPage(),
                 '/createCommentPage': (context) => const CreateCommentPage(),
                 '/createNewPoll': (context) => const CreatePollPage(),
@@ -99,6 +100,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final fireBaseInstance = FirebaseFirestore.instance.collection('accounts');
   final formKey = GlobalKey<FormState>();
   final notifications = Notifications();
 
@@ -222,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account?"),
+                    Text(AppLocalizations.of(context).translate('no_account?')),
                     TextButton(
                         onPressed: goToSignUpPage, child: Text('Sign Up'))
                   ],
