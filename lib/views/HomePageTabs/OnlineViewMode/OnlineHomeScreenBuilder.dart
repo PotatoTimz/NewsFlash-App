@@ -315,7 +315,11 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance) {
       //Title
       Text(
         "${post.title}",
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+        style: const TextStyle(
+            fontFamily: 'PlayfairDisplay',
+            //fontWeight: FontWeight.bold,
+            fontSize: 25,
+        ),
         textAlign: TextAlign.center,
       ),
       const SizedBox(height: 10),
