@@ -58,7 +58,7 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
           } else {
             print("Data Loaded!");
             return ListView.builder(
-              scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   PostOnline post = PostOnline.fromMap(
@@ -170,13 +170,13 @@ Widget buildOnlineLongPost(
       ),
 
       //time
-      Row(
-        children: [
-          Text("${post.timeString}",
-              style:
-                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
-        ],
-      ),
+      // Row(
+      //   children: [
+      //     Text("${post.timeString}",
+      //         style:
+      //             const TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
+      //   ],
+      // ),
       const SizedBox(height: 10),
 
       //Title
@@ -193,16 +193,31 @@ Widget buildOnlineLongPost(
 
       //Description, if it's longer than a certain amount of characters, it will make 2 columns.
       IntrinsicHeight(
-        child: post.longDescription.length > 150
-            ? _buildDividedPost(post)
-            : _buildSinglePost(post)
-      ),
+          child: post.longDescription.length > 150
+              ? _buildDividedPost(post)
+              : _buildSinglePost(post)),
       const SizedBox(height: 20),
+      Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("${post.timeString}",
+                style:
+                    const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
+          ],
+        ),
+      ),
 
       //Image
-      Image.network(
-        "${post.imageURL}",
-        fit: BoxFit.fill,
+      Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            "${post.imageURL}",
+            fit: BoxFit.fill,
+          ),
+        ),
       ),
       //image section
       const SizedBox(
@@ -329,13 +344,13 @@ Widget buildOnlineShortPost(
       ),
 
       //time
-      Row(
-        children: [
-          Text("${post.timeString}",
-              style:
-                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
-        ],
-      ),
+      // Row(
+      //   children: [
+      //     Text("${post.timeString}",
+      //         style:
+      //             const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
+      //   ],
+      // ),
       const SizedBox(height: 10),
 
       //Title
@@ -359,10 +374,23 @@ Widget buildOnlineShortPost(
               fontSize: 15, fontStyle: FontStyle.italic, color: Colors.black54),
         ),
       ),
-      const SizedBox(height: 20),
-
+      // time
+      Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("${post.timeString}",
+                style:
+                    const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
+          ],
+        ),
+      ),
       //Image
-      Image.network("${post.imageURL}"),
+      Container(
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network("${post.imageURL}"))),
       //image section
       const SizedBox(
         height: 20,
@@ -389,16 +417,13 @@ _repost(post, loggedInAccount) {
   insertOnlineDatabase(newPost);
 }
 
-String _findCutOff(String text, int half)
-{
-  int cutOffPoint = (text.length/2).floor();
-  while (text[cutOffPoint] != ' ')
-  {
+String _findCutOff(String text, int half) {
+  int cutOffPoint = (text.length / 2).floor();
+  while (text[cutOffPoint] != ' ') {
     cutOffPoint++;
   }
-  if (half == 1)
-  {
-     return text.substring(0, cutOffPoint);
+  if (half == 1) {
+    return text.substring(0, cutOffPoint);
   }
   return text.substring(cutOffPoint);
 }
@@ -480,8 +505,7 @@ _showDeleteDialog(context, fireBaseInstance) {
       });
 }
 
-Widget _buildDividedPost(PostOnline post)
-{
+Widget _buildDividedPost(PostOnline post) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -522,8 +546,7 @@ Widget _buildDividedPost(PostOnline post)
   );
 }
 
-Widget _buildSinglePost (PostOnline post)
-{
+Widget _buildSinglePost(PostOnline post) {
   return Column(
     children: [
       Expanded(
