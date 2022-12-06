@@ -22,10 +22,10 @@ class _UserProfilePage extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
-        appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context);
-        },),),
+      appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context);
+      },),),
       body: StreamBuilder(
         stream: fireBaseInstance.snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {

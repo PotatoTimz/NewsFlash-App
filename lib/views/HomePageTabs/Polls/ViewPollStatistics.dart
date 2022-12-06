@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../../models/Polls.dart';
 import 'PollFrequencyTable.dart';
 
-/*
- ViewPollStatistics displays polls using a data table containing the title of each of the
- polls as well as the amount of votes given to each option
-
- @author Andre Alix
- @version Final - Group Project
- @since 2022-12-06
- */
 class ViewPollStatistics extends StatefulWidget {
   ViewPollStatistics({Key? key, this.pollData}) : super(key: key);
 
@@ -23,10 +16,7 @@ class _ViewPollStatisticsState extends State<ViewPollStatistics> {
 
   List<Polls> pollsList = [];
 
-  /*
-    On initialization will add options to polls that have less than 4 options
-    to allow for smaller polls to be easily indicated within the data table
-   */  @override
+  @override
   void initState(){
     for(int i = 0; i < widget.pollData.length; i++){
       Polls poll = Polls.fromMap(widget.pollData[i].data(), reference: widget.pollData[i].reference);
@@ -43,13 +33,7 @@ class _ViewPollStatisticsState extends State<ViewPollStatistics> {
 
   }
 
-  /*
-    Builds a data table that contains the results and the title of each poll
-    The Data table will contain 5 columns (title and results (1-4)) and will be
-    on display for the user. Option names can be indicated by holding on the option
-    results and will change in correlation to each poll
-    Polls with less than 4 options will display "None" for empty options
-   */
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

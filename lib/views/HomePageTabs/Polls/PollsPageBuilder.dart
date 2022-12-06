@@ -2,21 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:groupproject/models/Polls.dart';
 import 'package:groupproject/views/DatabaseEditors.dart';
+import 'package:charts_flutter_new/flutter.dart' as charts;
 import 'package:pie_chart/pie_chart.dart';
+
 import 'ViewPollStatistics.dart';
 
-/*
- PollsPageBuilder creates a list of polls based on the data found within the firebase
- database "polls".
- Data stored like "description", "title", etc are all found within the database and are
- converted into Poll types which are than displayed to the user through a listview
- @author Andre Alix
- @version Final - Group Project
- @since 2022-12-06
- */
-
-// Stores boolean used to determine whether the user has already voted for the
-// specific poll
 List voted = [];
 
 class PollsPageBuilder extends StatefulWidget {
@@ -26,24 +16,11 @@ class PollsPageBuilder extends StatefulWidget {
   State<PollsPageBuilder> createState() => _PollsPageBuilderState();
 }
 
-/*
-  PollsPageBuilder creates a listview using snapshot instances found within the database.
-  The data in the firebase is read and than converted into "Polls" class instances
-  This is used to generate widgets containing a visual representation and for the user
-  allowing them to view the results and to vote for any given poll
-  On startup polls will display a question and a list of answers (2-4) the user may choose
-  to answer once. After voting the user will no longer be allowed to vote and will be shown
-  the current results for the poll
- */
-
 class _PollsPageBuilderState extends State<PollsPageBuilder> {
 
   final fireBaseInstance = FirebaseFirestore.instance.collection('polls');
   int pollSelectedIndex = 10^100;
 
-  // Collects data from the firebase database and generates "polls"
-  // Also creates the button to alternatively view polls in a datatable or frequency chart
-  // Poll data will be either displayed in voting mode or viewing mode.
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -85,7 +62,7 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
                           child: Container(
                             decoration: BoxDecoration(color: pollSelectedIndex != index ? Colors.white : Colors.black12 ),
                             padding: const EdgeInsets.all(15),
-                            child: voted[index] == false ? buildPollView(poll, index, context) : buildPollResults(poll, index, context),
+                            child: voted[index] == false ? buildPollPost(poll, index, context) : buildPollResults2(poll, index, context),
 
                           ),
 
@@ -102,12 +79,7 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
     );
   }
 
-  // Poll viewing mode
-  // Displays poll information including the title, description, etc
-  // As well as an option to delete and vote for the poll, voting will
-  // change the poll to viewing mode where the poll's results will be shown
-  // Poll's are shown in viewing mode by default
-  Widget buildPollView(poll, index, context){
+  Widget buildPollPost(poll, index, context){
     return Column(
       children: [
 
@@ -202,11 +174,7 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
     );
   }
 
-  // Poll Results Mode
-  // Displays the results of a poll through a pie chart. Users will only be shown
-  // the results of a poll after voting for the poll and will no longer be allowed
-  // to vote again once they vote.
-  Widget buildPollResults(poll, index, context){
+  Widget buildPollResults2(poll, index, context){
 
     Map<String, double> dataMap = {};
 
@@ -279,9 +247,6 @@ class _PollsPageBuilderState extends State<PollsPageBuilder> {
     );
   }
 
-  // deleteDialog shows is shown by clicking the 3 dots button beside the username
-  // This will prompt a dialog to appear asking the user whether they would like
-  // to delete the post
   deleteDialog(context, index, fireBaseInstance){
     showDialog(context: context,
         barrierDismissible: false,                              //doesn't allow user to click of alert pop up
