@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:groupproject/models/Polls.dart';
 
-import '../../../notifications.dart';
+/*
 
+ */
 class CreatePollPage extends StatefulWidget {
   const CreatePollPage({Key? key}) : super(key: key);
 
@@ -29,98 +30,102 @@ class _CreatePollPageState extends State<CreatePollPage> {
         key: formKey,
         child: Padding(
           padding: const EdgeInsets.all(18.0),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
               children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Author",
-                    hintText: "Enter your username",
-                  ),
-                  onChanged: (value) {
-                    userName = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Headline",
-                    hintText: "Enter the title of your poll",
-                  ),
-                  onChanged: (value) {
-                    title = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Description",
-                    hintText: "What would you like to tell the pollers",
-                  ),
-                  onChanged: (value) {
-                    description = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Choice 1",
-                    hintText: "Enter an answer to your poll",
-                  ),
-                  onChanged: (value) {
-                    pollOptions[0] = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Choice 2",
-                    hintText: "Enter an answer to your poll",
-                  ),
-                  onChanged: (value) {
-                    pollOptions[1] = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Choice 3",
-                    hintText: "Enter an answer to your poll",
-                  ),
-                  onChanged: (value) {
-                    pollOptions[2] = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Choice 4",
-                    hintText: "Enter an answer to your poll",
-                  ),
-                  onChanged: (value) {
-                    pollOptions[3] = value;
-                  },
-                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Author",
+                        hintText: "Enter your username",
+                      ),
+                      onChanged: (value) {
+                        userName = value;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Headline",
+                        hintText: "Enter the title of your poll",
+                      ),
+                      onChanged: (value) {
+                        title = value;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Description",
+                        hintText: "What would you like to tell the pollers",
+                      ),
+                      onChanged: (value) {
+                        description = value;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Choice 1",
+                        hintText: "Enter an answer to your poll",
+                      ),
+                      onChanged: (value) {
+                        pollOptions[0] = value;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Choice 2",
+                        hintText: "Enter an answer to your poll",
+                      ),
+                      onChanged: (value) {
+                        pollOptions[1] = value;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Choice 3",
+                        hintText: "Enter an answer to your poll",
+                      ),
+                      onChanged: (value) {
+                        pollOptions[2] = value;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: "Choice 4",
+                        hintText: "Enter an answer to your poll",
+                      ),
+                      onChanged: (value) {
+                        pollOptions[3] = value;
+                      },
+                    ),
 
-                ElevatedButton(
-                    onPressed: (){
-                      String? postTime = formatTime();
-                      timeString = postTime;
-                      pollOptions.removeWhere((item) => ["", null].contains(item));
-                      if (pollOptions.length <= 1){
-                      Navigator.of(context).pop(null);
-                      }
-                      else {
-                        Polls newPoll = Polls(
-                            userName: userName,
-                            title: title,
-                            timeString: timeString,
-                            description: description,
-                            pollOptions: pollOptions,
-                            pollResults: pollResults
-                        );
-                        var snackBar = const SnackBar(
-                            duration: Duration(seconds: 1),
-                            content: Text("Poll Created!"));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        Navigator.of(context).pop(newPoll);
-                      }
-                    },
-                    child: const Text("Create Post")),
+                    ElevatedButton(
+                        onPressed: (){
+                          String? postTime = formatTime();
+                          timeString = postTime;
+                          pollOptions.removeWhere((item) => ["", null].contains(item));
+                          if (pollOptions.length <= 1){
+                          Navigator.of(context).pop(null);
+                          }
+                          else {
+                            Polls newPoll = Polls(
+                                userName: userName,
+                                title: title,
+                                timeString: timeString,
+                                description: description,
+                                pollOptions: pollOptions,
+                                pollResults: pollResults
+                            );
+                            var snackBar = const SnackBar(
+                                duration: Duration(seconds: 1),
+                                content: Text("Poll Created!"));
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            Navigator.of(context).pop(newPoll);
+                          }
+                        },
+                        child: const Text("Create Post")),
+                  ],
+                ),
               ]
           ),
         ),

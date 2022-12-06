@@ -91,9 +91,9 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                             padding: const EdgeInsets.all(15),
                             child: selectedIndex != index
                                 ? buildOnlineShortPost(
-                                    post, context, index, fireBaseInstance)
+                                post, context, index, fireBaseInstance)
                                 : buildOnlineLongPost(
-                                    post, context, index, fireBaseInstance),
+                                post, context, index, fireBaseInstance),
                           )));
                 });
           }
@@ -156,7 +156,7 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
         children: [
           Text("${post.timeString}",
               style:
-                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
+              const TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
         ],
       ),
       const SizedBox(height: 10),
@@ -239,24 +239,24 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance) {
               text: "Posted from: ",
               style: TextStyle(fontSize: 15, color: Colors.black),
               children: <TextSpan>[
-            TextSpan(
-                text: "${post.location}",
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline),
-                // When tapping the blue underlined text that contains the location of where
-                // the post was from, it takes you to the mapviewer page
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MapViewer(
+                TextSpan(
+                    text: "${post.location}",
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline),
+                    // When tapping the blue underlined text that contains the location of where
+                    // the post was from, it takes you to the mapviewer page
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapViewer(
                                   address: post.location,
                                 )));
-                  }),
-          ])),
+                      }),
+              ])),
     ],
   );
 }
@@ -307,7 +307,7 @@ Widget buildOnlineShortPost(post, context, index, fireBaseInstance) {
         children: [
           Text("${post.timeString}",
               style:
-                  const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
+              const TextStyle(fontStyle: FontStyle.italic, fontSize: 10)),
         ],
       ),
       const SizedBox(height: 10),
@@ -396,7 +396,7 @@ _showDeleteDialog(context, fireBaseInstance) {
         return AlertDialog(
           title: const Text("Delete Post"),
           content:
-              const Text("Are you sure you would like to delete this post"),
+          const Text("Are you sure you would like to delete this post"),
           actions: [
             TextButton(
                 onPressed: () {
