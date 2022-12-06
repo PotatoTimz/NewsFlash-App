@@ -125,7 +125,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 icon: Icon(Icons.home),
               ),
               Tab(
-                  text: AppLocalizations.of(context).translate('picture_tab'),
+                  text: 'picture_tab',
                   icon: Icon(Icons.photo)),
               Tab(
                   text: AppLocalizations.of(context).translate('polls_tab'),

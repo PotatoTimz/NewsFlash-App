@@ -86,9 +86,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                       children: [
                                         Text(
                                             "${widget.loggedInUser!.numposts}"),
-                                        Text(
-                                            AppLocalizations.of(context)
-                                                .translate('profile_posts'),
+                                        Text('Posts',
                                             style: TextStyle(fontSize: 14)),
                                       ],
                                     ),
@@ -97,8 +95,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                       children: [
                                         Text(
                                             "${widget.loggedInUser!.followers}"),
-                                        Text(AppLocalizations.of(context)
-                                            .translate('profile_followers')),
+                                        Text('Followers'),
                                       ],
                                     ),
                                     Spacer(),
@@ -115,9 +112,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                           children: [
                                             Text(
                                                 "${widget.loggedInUser!.following}"),
-                                            Text(AppLocalizations.of(context)
-                                                .translate(
-                                                    'profile_following')),
+                                            Text('Following'),
                                           ],
                                         )),
                                     Spacer(),
@@ -144,8 +139,7 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                             Icons.edit,
                             size: 24.0,
                           ),
-                          label: Text(AppLocalizations.of(context)
-                              .translate('edit_profile')), // <-- Text
+                          label: Text('edit_profile'), // <-- Text
                         ),
                         const SizedBox(height: 20),
 

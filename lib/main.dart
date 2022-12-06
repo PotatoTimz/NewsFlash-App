@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
               home: const LoginPage(title: 'Flutter Demo Home Page'),
               routes: {
                 '/homePage': (context) => HomePageWidget(
-                    title: AppLocalizations.of(context).translate('title')),
+                    title: 'Home Page'),
                 '/createPostPage': (context) =>
                     const CreatePostWidget(title: "Create a Post",),
                 '/commentPage': (context) => CommentPage(),
