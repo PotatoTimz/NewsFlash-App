@@ -253,9 +253,9 @@ Widget buildOnlineLongPost(post, context, index, fireBaseInstance, loggedInAccou
           const SizedBox(width: 20),
           IconButton(
             onPressed: () {
-              _repost(post, loggedInAccount);
               post.numReposts += 1;
               updateOnlineDatabase(selectedIndex, post, fireBaseInstance);
+              _repost(post, loggedInAccount);
               //print("Number of Reposts: ${post.numReposts}");
             },
             icon: const Icon(Icons.repeat, size: 20),
