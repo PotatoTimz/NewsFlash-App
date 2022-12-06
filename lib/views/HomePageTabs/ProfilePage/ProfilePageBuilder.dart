@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../app_localizations.dart';
 import '../../../models/Account.dart';
 import '../../../models/PostOnline.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
@@ -119,7 +120,10 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                               children: [
                                                 Text(
                                                     "${widget.loggedInUser!.numposts}"),
-                                                Text("Posts",
+                                                Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'profile_posts'),
                                                     style: TextStyle(
                                                         fontSize: 14)),
                                               ],
@@ -140,7 +144,10 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                                   children: [
                                                     Text(
                                                         "${widget.loggedInUser!.followers}"),
-                                                    Text("Followers"),
+                                                    Text(AppLocalizations.of(
+                                                            context)
+                                                        .translate(
+                                                            'profile_followers')),
                                                   ],
                                                 )),
                                             // Spacer(),
@@ -159,7 +166,10 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                                   children: [
                                                     Text(
                                                         "${widget.loggedInUser!.following}"),
-                                                    Text("Following"),
+                                                    Text(AppLocalizations.of(
+                                                            context)
+                                                        .translate(
+                                                            'profile_following')),
                                                   ],
                                                 )),
                                             // Spacer(),

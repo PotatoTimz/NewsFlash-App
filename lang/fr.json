@@ -25,6 +25,8 @@
     "post_dialog": "Qu'est-ce que tu aimerais faire?",
     "edit_post": "modifier le message",
     "delete_post": "supprimer le message",
+    "delete_post_confirm": "Voulez-vous vraiment supprimer ce message?",
     "save_post": "enregistrer le message"
-  
+
+      
 }

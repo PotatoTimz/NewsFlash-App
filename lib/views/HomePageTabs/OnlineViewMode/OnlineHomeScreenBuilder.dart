@@ -473,9 +473,9 @@ _showDeleteDialog(context, fireBaseInstance) {
       barrierDismissible: false, //doesn't allow user to click of alert pop up
       builder: (context) {
         return AlertDialog(
-          title: const Text("Delete Post"),
-          content:
-              const Text("Are you sure you would like to delete this post"),
+          title: Text(AppLocalizations.of(context).translate('delete_post')),
+          content: Text(
+              AppLocalizations.of(context).translate('delete_post_confirm')),
           actions: [
             TextButton(
                 onPressed: () {
