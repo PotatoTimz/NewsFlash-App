@@ -10,12 +10,15 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../models/Account.dart';
 import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 
 class PictureViewerBuilder extends StatefulWidget {
-  const PictureViewerBuilder({Key? key}) : super(key: key);
+  const PictureViewerBuilder({Key? key, this.loggedInAccount}) : super(key: key);
+
+  final Account? loggedInAccount;
 
   @override
   State<PictureViewerBuilder> createState() => _PictureViewerBuilderState();
@@ -61,9 +64,10 @@ class _PictureViewerBuilderState extends State<PictureViewerBuilder> {
                             selectedIndex = index;
                           });
                           var updatedPost = await Navigator.pushNamed(
-                              context, '/commentPage',
-                              arguments: {'fireBaseInstance': fireBaseInstance}
-                          );
+                              context, '/commentPage', arguments: {
+                            'fireBaseInstance': fireBaseInstance,
+                            'user': widget.loggedInAccount,
+                          });
                           if(updatedPost != null) {
                             updateOnlineDatabase(index, updatedPost, fireBaseInstance);
                           }

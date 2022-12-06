@@ -84,6 +84,9 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                               'fireBaseInstance': fireBaseInstance,
                               'user': widget.loggedInAccount,
                             });
+                            if(updatedPost != null) {
+                              updateOnlineDatabase(index, updatedPost, fireBaseInstance);
+                            }
                           },
                           child: SingleChildScrollView(
                             child: Container(

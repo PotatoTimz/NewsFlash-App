@@ -109,7 +109,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             TabBarView(
           children: [
             OnlineHomeScreen(loggedInAccount: loggedInAccount),
-            PictureViewerBuilder(),
+            PictureViewerBuilder(loggedInAccount: loggedInAccount),
             PollsPageBuilder(),
             OfflineHomeScreen(),
             ProfilePageBuilder(loggedInUser: loggedInAccount),

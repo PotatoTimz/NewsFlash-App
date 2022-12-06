@@ -192,13 +192,12 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                           print(selectedIndex);
                                         });
                                         var updatedPost = await Navigator.pushNamed(
-                                            context, '/commentPage',
-                                            arguments: {'fireBaseInstance': fireBaseInstance
-                                            });
+                                            context, '/commentPage', arguments: {
+                                          'fireBaseInstance': fireBaseInstance,
+                                          'user': widget.loggedInUser,
+                                        });
                                         if(updatedPost != null) {
-                                          updateOnlineDatabase(
-                                              profilePosts[index]['id'], updatedPost,
-                                              fireBaseInstance);
+                                          updateOnlineDatabase(index, updatedPost, fireBaseInstance);
                                         }
                                       },
                                       child: Container(
