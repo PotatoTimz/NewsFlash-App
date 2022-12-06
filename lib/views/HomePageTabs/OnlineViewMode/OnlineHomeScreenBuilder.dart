@@ -58,6 +58,7 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
           } else {
             print("Data Loaded!");
             return ListView.builder(
+              scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   PostOnline post = PostOnline.fromMap(
@@ -90,17 +91,20 @@ class _OnlineHomeScreenState extends State<OnlineHomeScreen> {
                                   'user': widget.loggedInAccount,
                                 });
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: selectedIndex != index
-                                    ? Colors.white
-                                    : Colors.black12),
-                            padding: const EdgeInsets.all(15),
-                            child: selectedIndex != index
-                                ? buildOnlineShortPost(post, context, index,
-                                    fireBaseInstance, widget.loggedInAccount)
-                                : buildOnlineLongPost(post, context, index,
-                                    fireBaseInstance, widget.loggedInAccount),
+                          child: SingleChildScrollView(
+                            child: Container(
+                              width: 400,
+                              decoration: BoxDecoration(
+                                  color: selectedIndex != index
+                                      ? Colors.white
+                                      : Colors.black12),
+                              padding: const EdgeInsets.all(15),
+                              child: selectedIndex != index
+                                  ? buildOnlineShortPost(post, context, index,
+                                      fireBaseInstance, widget.loggedInAccount)
+                                  : buildOnlineLongPost(post, context, index,
+                                      fireBaseInstance, widget.loggedInAccount),
+                            ),
                           )));
                 });
           }
@@ -144,9 +148,12 @@ Widget buildOnlineLongPost(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("${post.userName}",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20)),
+                  Container(
+                    width: 250,
+                    child: Text("${post.userName}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                  ),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
@@ -300,9 +307,12 @@ Widget buildOnlineShortPost(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("${post.userName}",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15)),
+                  Container(
+                    width: 250,
+                    child: Text("${post.userName}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15)),
+                  ),
                   IconButton(
                     onPressed: () {
                       selectedIndex = index;
