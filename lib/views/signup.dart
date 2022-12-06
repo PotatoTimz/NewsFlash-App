@@ -98,6 +98,8 @@ class _SignupPageState extends State<SignupPage > {
       "numposts": 0,
       "followers": 0,
       "following": 0,
+      "listoffollowers": [],
+      "listoffollowing": [],
     };
     await
     FirebaseFirestore.instance.collection('accounts').doc().set(data);

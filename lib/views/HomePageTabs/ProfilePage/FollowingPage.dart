@@ -1,5 +1,6 @@
 //import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/models/Polls.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
@@ -28,65 +29,70 @@ class _FollowingePageState extends State<FollowingPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ProfileArguments;
+    final fireBaseInstance = FirebaseFirestore.instance.collection('accounts');
 
-    int? fol = args.loggedInUser?.following;
-
-    //final un = args.username;
-    //final pw = args.password;
     int i = 100;
-    return Scaffold(
-      appBar: AppBar(title: const Text("Edit Profile"),),
-      body: ListView(
-        padding: const EdgeInsets.all(8),
-        children: [
+    return StreamBuilder(
+        stream: fireBaseInstance.snapshots(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          print("Data is missing from buildGradeList");
+          return CircularProgressIndicator();
+         } else {
+          var li = [];
+          for (int i = 0; i < snapshot.data.docs.length; i++) {
+            if (snapshot.data.docs[0].data()["username"].toLowerCase() ==
+                args.loggedInUser!.userName!.toLowerCase()) {
+              li = snapshot.data.docs[0].data()["listoffollowing"];
+            }
+          }
 
-          for (int i=0; i<followinglist.length; i++)
-            ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-
-                children: [Text(followinglist[i],style: TextStyle(fontSize: 20)),
-                  IconButton(icon: Icon(Icons.delete,size: 20,),onPressed: ()=> {deleteuser(i),args.loggedInUser?.following =  followinglist.length,Navigator.of(context).pop(),
-                    Navigator.pushNamed(
-                        context, '/followinglist', arguments: ProfileArguments(
-                      args.loggedInUser,
-
-                    )) })],
-              ),],
-
-
-          ElevatedButton.icon(
-            onPressed: ()async{
-
-              Navigator.of(context).pop();
-
-            },
-            label: Text('exit'),
-            icon: Icon(
-
-              Icons.exit_to_app,
-              size: 24.0,
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Following List"),
             ),
-
-          ),
-
-
-        ],
-      ),
-    );
+            body: ListView(
+              padding: const EdgeInsets.all(8),
+              children: [
+                for (int i = 0; i < li.length; i++) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(li[i], style: TextStyle(fontSize: 20)),
+                      IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            size: 20,
+                          ),
+                          onPressed: () => {
+                            deleteuser(li, i),
+                            args.loggedInUser?.following = li.length,
+                            Navigator.of(context).pop(),
+                          })
+                    ],
+                  ),
+                ],
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                  },
+                  label: Text('exit'),
+                  icon: Icon(
+                    Icons.exit_to_app,
+                    size: 24.0,
+                  ),
+                ),
+              ],
+            ),
+          );}
+        });
   }
 
-  deleteuser(index) async{
+//Function that removes a user from their follower list
+}
 
-
-    followinglist.removeAt(index);
-    print(index);
-    print(followinglist);
-
-
-  }
-
-
-
-
+deleteuser(li, index) async {
+  li.removeAt(index);
+  //print(index);
+  //print(followerlist);
 }
