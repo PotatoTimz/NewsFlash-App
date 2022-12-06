@@ -1,7 +1,25 @@
 {
+  
     "sign_in": "s'identifier",
     "log_in": "connexion",
+    "logging_in": "Se connecter ...",
+    "no_account?": "Vous n'avez pas de compte ?",
     "forgot_password": "Mot de passe oublié",
-    "first_string": "Ahoj! Toto je prvá správa.",
-    "second_string": "Ak ti tento tutoriál pomáha, daj mu like a prihlás sa na odber u Reso Codera 😉"
-  }
+
+    "add_post_dialog": "Quel type de publication souhaiteriez-vous faire ?",
+    "written_post": "message écrit",
+    "polls_post": "sondages",
+    
+    "title": "Page d'accueil",
+    "home_tab": "Maison",
+    "picture_tab": "Images",
+    "polls_tab": "sondages",
+    "offline_tab": "Hors ligne",
+    "profile_tab": "Profil",
+
+    "profile_posts": "postes",
+    "profile_followers": "suiveurs",
+    "profile_following": "suivant",
+    "edit_profile": "Editer le profil"
+  
+}

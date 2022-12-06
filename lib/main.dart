@@ -50,8 +50,6 @@ class MyApp extends StatelessWidget {
               supportedLocales: [
                 Locale('en', ''),
                 Locale('fr', 'FR'),
-                Locale('sk', 'SK'),
-                Locale('de', ''),
                 Locale('es', '')
               ],
               localizationsDelegates: [
@@ -71,8 +69,8 @@ class MyApp extends StatelessWidget {
               },
               home: const LoginPage(title: 'Flutter Demo Home Page'),
               routes: {
-                '/homePage': (context) =>
-                    const HomePageWidget(title: "HomePage"),
+                '/homePage': (context) => HomePageWidget(
+                    title: AppLocalizations.of(context).translate('title')),
                 '/createPostPage': (context) =>
                     const CreatePostWidget(title: "Create a Post",),
                 '/commentPage': (context) => CommentPage(),
@@ -126,11 +124,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> goToSignUpPage() async {
     await Future.delayed(Duration(seconds: 1));
     var SignUpStatus = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SignupPage()
-        ));
-
+        context, MaterialPageRoute(builder: (context) => SignupPage()));
   }
 
   void notificationNow() async {
@@ -227,7 +221,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Don't have an account?"),
-                    TextButton(onPressed: goToSignUpPage, child: Text('Sign Up'))
+                    TextButton(
+                        onPressed: goToSignUpPage, child: Text('Sign Up'))
                   ],
                 )
               ]),
@@ -235,6 +230,4 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
-
 }

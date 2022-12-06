@@ -16,6 +16,7 @@ import 'package:groupproject/models/Account.dart';
 import 'package:groupproject/views/HomePageTabs/PictureViewMode/PictureViewerBuilder.dart';
 import 'package:groupproject/views/HomePageTabs/SearchPage/SearchPage.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
+import '../app_localizations.dart';
 import 'DatabaseEditors.dart';
 import 'HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import 'HomePageTabs/OfflineDatabase/post_model.dart';
@@ -61,10 +62,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-    final routeData = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    final Account loggedInAccount = Account(userName: routeData['userName'], password: routeData['password'], email: "", numposts: 0, followers: 0, following: 0);
-    if (loggedInAccount.userName == ""){
+    final routeData =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final Account loggedInAccount = Account(
+        userName: routeData['userName'],
+        password: routeData['password'],
+        email: "",
+        numposts: 0,
+        followers: 0,
+        following: 0);
+    if (loggedInAccount.userName == "") {
       loggedInAccount.userName = "Anonymous";
     }
 
@@ -83,7 +90,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ),
             IconButton(
                 onPressed: () {
-                  showSearch(context: context, delegate: SearchPage(loggedInUser: loggedInAccount));
+                  showSearch(
+                      context: context,
+                      delegate: SearchPage(loggedInUser: loggedInAccount));
                 },
                 icon: const Icon(Icons.search)),
             IconButton(
@@ -94,10 +103,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           ],
         ),
         body:
-        //SingleChildScrollView (
-        //   scrollDirection: Axis.horizontal,
-        //  child:
-        TabBarView(
+            //SingleChildScrollView (
+            //   scrollDirection: Axis.horizontal,
+            //  child:
+            TabBarView(
           children: [
             OnlineHomeScreen(loggedInAccount: loggedInAccount),
             PictureViewerBuilder(),
@@ -109,13 +118,24 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         //),
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(color: Colors.teal),
-          child: const TabBar(
+          child: TabBar(
             tabs: [
-              Tab(text: "HomeScreen", icon: Icon(Icons.home),),
-              Tab(text: "PictureViewer", icon: Icon(Icons.photo)),
-              Tab(text: "Polls", icon: Icon(Icons.poll)),
-              Tab(text: "Offline Viewer", icon: Icon(Icons.download)),
-              Tab(text: "Profile", icon: Icon(Icons.account_box)),
+              Tab(
+                text: AppLocalizations.of(context).translate('home_tab'),
+                icon: Icon(Icons.home),
+              ),
+              Tab(
+                  text: AppLocalizations.of(context).translate('picture_tab'),
+                  icon: Icon(Icons.photo)),
+              Tab(
+                  text: AppLocalizations.of(context).translate('polls_tab'),
+                  icon: Icon(Icons.poll)),
+              Tab(
+                  text: AppLocalizations.of(context).translate('offline_tab'),
+                  icon: Icon(Icons.download)),
+              Tab(
+                  text: AppLocalizations.of(context).translate('profile_tab'),
+                  icon: Icon(Icons.account_box)),
             ],
           ),
         ),
@@ -123,29 +143,29 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
-  showAddPostDialog(context, loggedInAccount){
+  showAddPostDialog(context, loggedInAccount) {
     showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return SimpleDialog(
-            title: const Text("What type of post would you like to make"),
+            title:
+                Text(AppLocalizations.of(context).translate('add_post_dialog')),
             children: [
               SimpleDialogOption(
-                  onPressed: (){
+                  onPressed: () {
                     goToCreatePostPage(context, loggedInAccount);
                   },
-                  child: const Text("Written post")
-              ),
+                  child: Text(
+                      AppLocalizations.of(context).translate('written_post'))),
               SimpleDialogOption(
-                  onPressed: (){
+                  onPressed: () {
                     goToCreatePollsPage(context);
                   },
-                  child: const Text("Polls post")
-              ),
+                  child: Text(
+                      AppLocalizations.of(context).translate('polls_post'))),
             ],
           );
-        }
-    );
+        });
   }
 
   /*
@@ -153,9 +173,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
    * done from any of the tabs within the HomePage navigator.
    */
   Future<void> goToCreatePostPage(context, loggedInAccount) async {
-    var newPost = await Navigator.pushNamed(context, 
-        r'/createPostPage',
-    arguments: ProfileArguments(loggedInAccount));
+    var newPost = await Navigator.pushNamed(context, r'/createPostPage',
+        arguments: ProfileArguments(loggedInAccount));
     if (newPost == null) {
       print("Nothing was inputed");
     } else {
@@ -163,16 +182,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     }
   }
 
-  Future<void> goToCreatePollsPage(context) async{
+  Future<void> goToCreatePollsPage(context) async {
     var newPoll = await Navigator.pushNamed(
-        context, 
-        r'/createNewPoll',);
-    if (newPoll == null){
+      context,
+      r'/createNewPoll',
+    );
+    if (newPoll == null) {
       print("Nothing was Inputted");
-    }
-    else{
+    } else {
       insertPollDatabase(newPoll);
     }
   }
 }
-

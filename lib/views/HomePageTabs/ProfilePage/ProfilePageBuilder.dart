@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../../app_localizations.dart';
 import '../../../models/Account.dart';
 import '../../../models/PostOnline.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
 import '../../DatabaseEditors.dart';
 import 'EditProfilePage.dart';
 
-class ProfileArguments{
+class ProfileArguments {
   final Account? loggedInUser;
   //final String password;
 
@@ -27,7 +28,6 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder(
         stream: fireBaseInstance.snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -35,11 +35,12 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
             print("Data is missing from buildGradeList");
             return CircularProgressIndicator();
           } else {
-
             List<dynamic> profilePosts = [];
-            for (int i = 0; i < snapshot.data.docs.length; i++){
-              PostOnline post = PostOnline.fromMap(snapshot.data.docs[i].data(), reference: snapshot.data.docs[i].reference);
-              if(post.userName?.toLowerCase() == widget.loggedInUser!.userName!.toLowerCase()){
+            for (int i = 0; i < snapshot.data.docs.length; i++) {
+              PostOnline post = PostOnline.fromMap(snapshot.data.docs[i].data(),
+                  reference: snapshot.data.docs[i].reference);
+              if (post.userName?.toLowerCase() ==
+                  widget.loggedInUser!.userName!.toLowerCase()) {
                 profilePosts.add({"post": post, "id": i});
               }
             }
@@ -49,15 +50,15 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
             return ListView(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-
                       children: [
-
                         Text(
                           "${widget.loggedInUser!.userName}",
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         const SizedBox(height: 20),
 
@@ -69,8 +70,13 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                 child: CircleAvatar(
                                   radius: 20,
                                   backgroundColor: Colors.teal,
-                                  child: Text(widget.loggedInUser!.userName![0] +
-                                      widget.loggedInUser!.userName![widget.loggedInUser!.userName!.length - 1]),
+                                  child: Text(
+                                      widget.loggedInUser!.userName![0] +
+                                          widget.loggedInUser!.userName![widget
+                                                  .loggedInUser!
+                                                  .userName!
+                                                  .length -
+                                              1]),
                                 )),
                             Flexible(
                                 flex: 2,
@@ -78,69 +84,68 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                   children: [
                                     Column(
                                       children: [
-                                        Text("${widget.loggedInUser!.numposts}" ),
-                                        Text("Posts",style: TextStyle(fontSize: 14)),
-
+                                        Text(
+                                            "${widget.loggedInUser!.numposts}"),
+                                        Text(
+                                            AppLocalizations.of(context)
+                                                .translate('profile_posts'),
+                                            style: TextStyle(fontSize: 14)),
                                       ],
                                     ),
                                     Spacer(),
                                     Column(
                                       children: [
-                                        Text("${widget.loggedInUser!.followers}" ),
-                                        Text("Followers"),
+                                        Text(
+                                            "${widget.loggedInUser!.followers}"),
+                                        Text(AppLocalizations.of(context)
+                                            .translate('profile_followers')),
                                       ],
                                     ),
                                     Spacer(),
-
                                     GestureDetector(
-                                      onTap: () async{
-                                        var updatedProfile = await Navigator.pushNamed(
-                                            context, '/followinglist',
-                                            arguments: ProfileArguments(
-                                              widget.loggedInUser,
-                                            )
-
-                                        );
-
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Text("${widget.loggedInUser!.following}" ),
-                                          Text("Following"),
-                                        ],
-                                      )
-                                    ),
+                                        onTap: () async {
+                                          var updatedProfile =
+                                              await Navigator.pushNamed(
+                                                  context, '/followinglist',
+                                                  arguments: ProfileArguments(
+                                                    widget.loggedInUser,
+                                                  ));
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                                "${widget.loggedInUser!.following}"),
+                                            Text(AppLocalizations.of(context)
+                                                .translate(
+                                                    'profile_following')),
+                                          ],
+                                        )),
                                     Spacer(),
                                   ],
                                 )),
-
                           ],
                         ),
                         const SizedBox(height: 10),
 
-
                         ElevatedButton.icon(
-                          onPressed: ()async{
+                          onPressed: () async {
                             print(widget.loggedInUser!.userName);
-                            setState(() {
-
-                            });
+                            setState(() {});
                             var updatedProfile = await Navigator.pushNamed(
                                 context, '/editprofile',
                                 arguments: ProfileArguments(
-                                    widget.loggedInUser,
-                                    //"${widget.loggedInUser!.userName}",
-                                    //"${widget.loggedInUser!.password}"
-                                )
-                            );
-
+                                  widget.loggedInUser,
+                                  //"${widget.loggedInUser!.userName}",
+                                  //"${widget.loggedInUser!.password}"
+                                ));
                           }, //need to add page
                           icon: Icon(
                             // <-- Icon
                             Icons.edit,
                             size: 24.0,
                           ),
-                          label: Text('edit profile'), // <-- Text
+                          label: Text(AppLocalizations.of(context)
+                              .translate('edit_profile')), // <-- Text
                         ),
                         const SizedBox(height: 20),
 
@@ -150,7 +155,8 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                             shrinkWrap: true,
                             physics: const ScrollPhysics(),
                             gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2),
                             itemCount: profilePosts.length,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
@@ -166,18 +172,20 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
                                     print(selectedIndex);
                                   });
                                   var updatedPost = await Navigator.pushNamed(
-                                      context, '/commentPage',
-                                      arguments: {'fireBaseInstance': fireBaseInstance
+                                      context, '/commentPage', arguments: {
+                                    'fireBaseInstance': fireBaseInstance
                                   });
-                                  if(updatedPost != null) {
+                                  if (updatedPost != null) {
                                     updateOnlineDatabase(
-                                        profilePosts[index]['id'], updatedPost,
+                                        profilePosts[index]['id'],
+                                        updatedPost,
                                         fireBaseInstance);
                                   }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: selectedIndex != profilePosts[index]['id']
+                                      color: selectedIndex !=
+                                              profilePosts[index]['id']
                                           ? Colors.white
                                           : Colors.black12),
                                   padding: EdgeInsets.all(10),
@@ -200,4 +208,3 @@ class _ProfilePageBuilderState extends State<ProfilePageBuilder> {
 Future<void> goToCommentPage(context) async {
   var newPost = await Navigator.pushNamed(context, r'/commentPage');
 }
-
