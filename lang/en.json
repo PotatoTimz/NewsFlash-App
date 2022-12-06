@@ -5,8 +5,9 @@
     "logging_in": "Logging in ...",
     "no_account?": "Don't have an account?",
     "forgot_password": "Forgot Password",
-
-
+    "add_post_dialog": "What type of post would you like to make",
+    "written_post": "Written Post",
+    "polls_post": "Polls Post",
     "title": "homepage",
     "home_tab": "Home",
     "Picture_tab": "Images",

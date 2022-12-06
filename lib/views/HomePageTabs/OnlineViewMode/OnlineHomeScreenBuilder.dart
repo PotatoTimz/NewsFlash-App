@@ -10,7 +10,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:groupproject/constants.dart';
 import 'package:groupproject/views/HomePageTabs/OnlineViewMode/MapViewer.dart';
 import 'package:groupproject/views/HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
 import '../../../models/Account.dart';
@@ -19,9 +18,6 @@ import '../../../models/PostOnline.dart';
 import '../../DatabaseEditors.dart';
 import '../../HomePage.dart';
 import '../OfflineDatabase/OfflineHomeScreenBuilder.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 
 class OnlineHomeScreen extends StatefulWidget {
   OnlineHomeScreen({Key? key, this.loggedInAccount}) : super(key: key);

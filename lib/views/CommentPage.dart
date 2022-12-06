@@ -13,6 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:groupproject/views/DatabaseEditors.dart';
 import 'package:groupproject/views/HomePageTabs/OfflineDatabase/OfflineHomeScreenBuilder.dart';
+import '../models/Account.dart';
 import '../models/PostOnline.dart';
 import 'HomePageTabs/OnlineViewMode/OnlineHomeScreenBuilder.dart';
 import 'HomePageTabs/ProfilePage/ProfilePageBuilder.dart';
@@ -42,9 +43,9 @@ class _CommentPageState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
 
-    final routeData = ModalRoute.of(context)?.settings.arguments as Map<String, Object>;
+    final routeData = ModalRoute.of(context)?.settings.arguments as Map<String, Object?>;
     final CollectionReference<Map<String, dynamic>> fireBaseInstance = routeData['fireBaseInstance'] as CollectionReference<Map<String, dynamic>>;
-    final loggedInAccount = routeData['user'] as ProfileArguments;
+    final loggedInAccount = routeData['user'] as Account;
 
     return Scaffold(
       appBar: AppBar(
