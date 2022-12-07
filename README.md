@@ -2,7 +2,7 @@
 
 Group members (3-5) (no Student IDs, only names and github usernames):
 
-1. Andre Alix
+1. Andre Alix Github: PotatoTimz
 
 2. Ian Reynolds: ianreyn
 
