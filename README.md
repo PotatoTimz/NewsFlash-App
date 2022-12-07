@@ -6,7 +6,7 @@ Group members (3-5) (no Student IDs, only names and github usernames):
 
 2. Ian Reynolds: ianreyn
 
-3. Andrew Romanof
+3. Andrew Romanof / andrewromanof
 
 4. Santhosh Chelvaranjan: SanthoshC8
 
