@@ -10,7 +10,7 @@ Group members (3-5) (no Student IDs, only names and github usernames):
 
 4. Santhosh Chelvaranjan: SanthoshC8
 
-5. Owais Najmi
+5. Owais Najmi - Github: OwaisN7/OwaisAN
 
 Technical Report: https://docs.google.com/document/d/1WV5Un-EnIbypHJb9lJ93xeDyot7sR2Vqr5hiCOFZv9o/edit?usp=sharing
 
