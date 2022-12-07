@@ -4,13 +4,15 @@ Group members (3-5) (no Student IDs, only names and github usernames):
 
 1. Andre Alix
 
-2. Ian Reynolds
+2. Ian Reynolds: ianreyn
 
 3. Andrew Romanof
 
 4. Santhosh Chelvaranjan
 
 5. Owais Najmi
+
+Technical Report: https://docs.google.com/document/d/1WV5Un-EnIbypHJb9lJ93xeDyot7sR2Vqr5hiCOFZv9o/edit?usp=sharing
 
 ## Overview
 This group project is designed for you to demonstrate the skills that you have learned in this course.  The final project that you submit in the last week of classes will be a completed mobile application.  Non-functional requirements, especially those associated with production-readiness, will be considered extremely important when marking this project.  You are expected to work in a group of three to five students when completing this project.  Students are not permitted to work alone on the project, as this eliminates one of the learning objectives of this assessment.
