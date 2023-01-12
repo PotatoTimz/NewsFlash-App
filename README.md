@@ -47,6 +47,7 @@ Newsflash is the perfect app to share your day with your friends, family, or any
 ## User’s guide
 #### Logging in
 If you already have an account, input your username and password to Log in. If you are a new user, click the “Sign Up” button and input a Username, Password and Email. You can also view Anonymously by leaving Username and Password blank.
+
 ![Imgur](https://i.imgur.com/BNOCwKo.png)
 
 *The login page, and the page to sign up for an account.*
